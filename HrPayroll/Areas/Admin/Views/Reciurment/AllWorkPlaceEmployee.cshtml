@@ -1,0 +1,156 @@
+﻿@{
+    ViewData["Title"] = "AllWorkPlaceEmployee";
+}
+@using HrPayroll.Areas.Admin.PaginationModel
+@model PagingModel
+<div class="page-wrapper">
+    <!-- content -->
+
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase">Employee Salary</h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-5">
+            </div>
+        </div>
+        <div class="content-page">
+            <div class="row filter-row">
+                <div class="col-sm-6 col-md-3 col-lg-3 col-xl-3 col-12">
+                    <div class="form-group custom-mt-form-group">
+                        <input class="form-control" type="text" id="searchWork">
+                        <label class="control-label">Employee Name</label><i class="bar"></i>
+                    </div>
+                    <div class="form-group custom-mt-form-group col-md-4">
+                        <select id="pageItem" class="form-control">
+                            <option>5</option>
+                            <option>10</option>
+                            <option>20</option>
+                            <option>30</option>
+                        </select>
+                        <label class="control-label">Page Item</label><i class="bar"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+
+                <div class="col-md-12">
+                    <div class="table-responsive mt-2">
+                        <table class="table table-striped custom-table datatable">
+                            <thead>
+                                <tr>
+                                    <th style="width:20%;">Employee</th>
+                                    <th>Employee Plasier</th>
+                                    <th>Company</th>
+                                    <th>Emperium</th>
+                                    <th>Position</th>
+                                    <th>Start Date</th>
+                                    <th>Salary</th>
+                                    <th class="text-right">Action</th>
+                                </tr>
+                                <tr id="allSalary" hidden>
+                                    <td>
+                                        <a class="href" ><img class="avatar" alt=""></a>
+                                        <h2 style="margin-top: 12px;"><a class="href-name"  style="color: cyan;"></a></h2>
+                                    </td>
+                                    <td class="item1"></td>
+                                    <td class="item2"><a></a></td>
+                                    <td class="item3"></td>
+                                    <td>
+                                        <div class="dropdown">
+                                            <a class="btn btn-white btn-sm btn-rounded positionName" style="color:yellow; cursor:pointer"></a>
+                                        </div>
+                                    </td>
+                                    <td class="item4"></td>
+                                    <td class="item5" style="color: yellow"><span>Azn</span></td>
+                                    <td class="text-right">
+                                        <div class="dropdown dropdown-action">
+                                            <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_salary" title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_salary" title="Delete"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </thead>
+                            <tbody id="all-emp-work">
+                                @foreach (var empinfo in Model.EmployeeInfoWorks)
+                                {
+                                    <tr>
+                                        <td>
+                                            @if (empinfo.Photo != null)
+                                            {
+                                                <a class="href" asp-controller="Employee" asp-area="Admin" asp-action="AboutEmployee" asp-route-page="@empinfo.id"><img class="avatar" src="~/img/@empinfo.Photo" alt=""></a>
+                                            }
+                                            else
+                                            {
+                                                <a asp-controller="Employee" asp-area="Admin" asp-action="AboutEmployee" asp-route-page="@empinfo.id"><img class="avatar" src="~/img/user.jpg" alt=""></a>
+                                            }
+                                            <h2 style="margin-top: 12px;"><a class="href-name" asp-controller="Employee" asp-area="Admin" asp-action="AboutEmployee" asp-route-page="@empinfo.id" style="color: cyan;">@empinfo.Name</a></h2>
+                                        </td>
+                                        <td class="item1">@empinfo.PlasierCode</td>
+                                        <td class="item2"><a>@empinfo.CompanyName</a></td>
+                                        <td class="item3">@empinfo.EmperiumName</td>
+                                        <td>
+                                            <div class="dropdown">
+                                                <a class="btn btn-white btn-sm btn-rounded positionName" style="color:yellow; cursor:pointer">@empinfo.PositionName</a>
+                                            </div>
+                                        </td>
+                                        <td class="item4">@empinfo.StartDate.ToString("dd.MM.yyyy")</td>
+                                        <td class="item5" style="color: yellow">@empinfo.Salary<span> Azn</span></td>
+                                        <td class="text-right">
+                                            <div class="dropdown dropdown-action">
+                                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                <div class="dropdown-menu dropdown-menu-right">
+                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#edit_salary" title="Edit"><i class="fa fa-pencil m-r-5"></i> Edit</a>
+                                                    <a class="dropdown-item" href="#" data-toggle="modal" data-target="#delete_salary" title="Delete"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-5" style="margin-top:20px;">
+                <div class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate  aaaa">
+                        <ul class="pagination" id="paging">
+
+                            <li class="paginate_button page-item next" id="PagePrev" onclick="">
+                                @if (Model.Paging.Prev)
+                                {
+                                    <a id="next1" style="margin-left: 5px; cursor: pointer; border-radius:35px;" class="page-link btn-danger">Previous</a>
+                                }
+                            </li>
+                            @for (int i = 1; i <= Model.Paging.PageCount; i++)
+                            {
+                                <li class="paginate_button page-item next" id="DataTable" onclick="">
+                                    <a id="pagination-ajax-workplace" style="margin-left: 5px; cursor: pointer; border-radius:35px;" class="page-link">@i.ToString()</a>
+                                </li>
+                            }
+                            <li class="paginate_button page-item next" id="PageNext" onclick="">
+                                @if (Model.Paging.Next)
+                                {
+                                    <a name="@(Model.Paging.CurrentPage + 1)" id="next1" style="margin-left: 5px; cursor: pointer; border-radius:35px;" class="page-link btn-danger">Next</a>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/work-place-employee.js"></script>
+<script src="~/js/Paging.js"></script>
+

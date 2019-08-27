@@ -1,0 +1,129 @@
+﻿
+@{
+    ViewData["Title"] = "AddEmployee";
+}
+@model Employee
+<div class="page-wrapper">
+    <!-- content -->
+    <div class="content container-fluid">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card">
+                        <div class="page-title">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <div class="Page-title">Employee information</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="">
+                                <form class="row" enctype="multipart/form-data" method="post">
+                                    <div asp-validation-summary="ModelOnly"></div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group custom-mt-form-group">
+                                            <input type="text" name="Name" asp-for="Name" />
+                                            <label class="control-label" asp-for="Name">Name</label><i class="bar"></i>
+                                            <span asp-validation-for="Name"></span>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <input type="text" asp-for="Surname" name="Surname">
+                                            <label class="control-label" asp-for="Surname">Surname</label><i class="bar"></i>
+                                            <span asp-validation-for="Surname"></span>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <input type="text" asp-for="FatherName" />
+                                            <label class="control-label" asp-for="FatherName">Father Name</label><i class="bar"></i>
+                                            <span asp-validation-for="FatherName"></span>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <input type="email" asp-for="Email" />
+                                            <label class="control-label" asp-for="Email">Email</label><i class="bar"></i>
+                                            <span asp-validation-for="Email"></span>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <select asp-for="Gender">
+                                                <option>Male</option>
+                                                <option>Female</option>
+                                            </select>
+                                            <span asp-validation-for="Gender"></span>
+                                            <label class="control-label" asp-for="Gender">Gender</label><i class="bar"></i>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <input type="text" asp-for="Nationally" />
+                                            <label class="control-label" asp-for="Nationally">Nationally</label><i class="bar"></i>
+                                            <span asp-validation-for="Nationally"></span>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <input type="text" asp-for="PlasiyerCode" />
+                                            <label class="control-label" asp-for="PlasiyerCode">Plasiyer Code</label><i class="bar"></i>
+                                            <span asp-validation-for="PlasiyerCode"></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <textarea id="message" class="form__field" rows="4" asp-for="DistrictRegistration"></textarea>
+                                            <label for="message" class="form-label" asp-for="DistrictRegistration">District Registration</label>
+                                            <span asp-validation-for="DistrictRegistration"></span>
+                                        </div>
+
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group custom-mt-form-group">
+                                            <input  asp-for="BirthDay" type="date" >
+                                            <label class="control-label" asp-for="BirthDay">Birth Date</label><i class="bar"></i>
+                                            <span asp-validation-for="BirthDay"></span>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <input type="number" asp-for="Number" />
+                                            <label class="control-label" asp-for="Number">Mobile number</label><i class="bar"></i>
+                                            <span asp-validation-for="Number"></span>
+                                        </div>
+
+                                        <div class="form-group custom-mt-form-group">
+                                            <input type="text" asp-for="IDCardSerialNumber" />
+                                            <label class="control-label" asp-for="IDCardSerialNumber">ID Card Serial Number</label><i class="bar"></i>
+                                            <span asp-validation-for="IDCardSerialNumber"></span>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <input  asp-for="IDCardExparyDate" type="date">
+                                            <label class="control-label" asp-for="IDCardExparyDate">ID Card Expary Date</label><i class="bar"></i>
+                                            <span asp-validation-for="IDCardExparyDate"></span>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <select asp-for="MaritalStatus">
+                                                <option>Married</option>
+                                                <option>Single</option>
+                                            </select>
+                                            <span asp-validation-for="MaritalStatus"></span>
+                                            <label class="control-label">Marital Status</label><i class="bar"></i>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="form-group custom-mt-form-group">
+                                                <input type="file" asp-for="Photo" name="Photo" style="margin-bottom:10px;" id="fileimage" multiple>
+                                                <label class="control-label"></label><i class="bar"></i>
+                                            </div>
+                                        </div>
+                                        <div class="form-group  user-img">
+                                            <div class="col-md-9">
+                                                <img src="" style="width:50%;" id="img" />
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group text-center custom-mt-form-group">
+                                            <button class="btn btn-primary mr-2" type="submit">Save</button>
+                                            <button class="btn btn-secondary" type="reset">Cancel</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/fileupload.js"></script>
+
+

@@ -1,0 +1,129 @@
+﻿
+@{
+    ViewData["Title"] = "EmployeeAll";
+}
+
+@using HrPayroll.Areas.Admin.PaginationModel
+@model PagingModel
+<div class="page-wrapper">
+    <!-- content -->
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase">Employee list</h5>
+                </div>
+            </div>
+        </div>
+        <div class="content-page">
+            <div class="row filter-row">
+                <div class="col-sm-6 col-md-4">
+                    <div class="form-group custom-mt-form-group">
+                        <input type="text" id="name" />
+                        <label class="control-label"> Name</label><i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="form-group custom-mt-form-group">
+                        <input type="text" id="surname" />
+                        <label class="control-label">Surname</label><i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="form-group custom-mt-form-group">
+                        <input type="text" id="pscode" />
+                        <label class="control-label">Plasiyer Code</label><i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-2">
+                    <div class="form-group custom-mt-form-group">
+                        <select id="pageItem" class="form-control">
+                            <option>5</option>
+                            <option>10</option>
+                            <option>20</option>
+                            <option>30</option>
+                        </select>
+                        <label class="control-label">Page Item</label><i class="bar"></i>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom:20px;">
+                <div class="col-md-3 showw1" id="addemp" style="display:none">
+                    <a class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Employee WorkPlace</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped custom-table datatable" id="tbody">
+                            <thead>
+                                <tr>
+                                    <th style="min-width:70px;">Name and Surname</th>
+                                    <th style="min-width:50px;">Plasiyer Code</th>
+                                    <th style="min-width:100px;">Phone Number</th>
+                                    <th style="min-width:50px;">Nationally</th>
+                                    <th style="min-width:50px;">Email</th>
+                                    <th style="min-width:50px;">BirthDay</th>
+                                    <th class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var elm in Model.Employees)
+                                {
+                                    <tr>
+                                        <td>
+                                            <h2 style="margin-right:5px"><img src="~/img/@elm.Photo" style="width:45px; border-radius:100px" /></h2>
+                                            <h2><a asp-controller="Employee" asp-area="Admin" asp-action="AboutEmployee" asp-route-page="@elm.Id">@elm.Name @elm.Surname</a></h2>
+                                        </td>
+                                        <td>@elm.PlasiyerCode</td>
+                                        <td>@elm.Number</td>
+                                        <td>@elm.Nationally</td>
+                                        <td>@elm.Email</td>
+                                        <td>@elm.BirthDay.ToString("MM.MM.yyyy")</td>
+                                        <td class="text-right">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" value="@elm.Id" id="WorkEmpCheck">
+                                                <label class="form-check-label"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-5" style="margin-top:20px;">
+                <div class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate  aaaa">
+                        <ul class="pagination" id="paging">
+
+                            <li class="paginate_button page-item next" id="PagePrev" onclick="">
+                                @if (Model.Paging.Prev)
+                                {
+                                    <a id="next" style="margin-left: 5px; cursor: pointer; border-radius:35px;" class="page-link btn-danger">Previous</a>
+                                }
+                            </li>
+                            @for (int i = 1; i <= Model.Paging.PageCount; i++)
+                            {
+                                <li class="paginate_button page-item next" id="DataTable" onclick="">
+                                    <a id="pagination-ajax-workplace" style="margin-left: 5px; cursor: pointer; border-radius:35px;" class="page-link">@i.ToString()</a>
+                                </li>
+                            }
+                            <li class="paginate_button page-item next" id="PageNext" onclick="">
+                                @if (Model.Paging.Next)
+                                {
+                                    <a name="@(Model.Paging.CurrentPage + 1)" id="next1" style="margin-left: 5px; cursor: pointer; border-radius:35px;" class="page-link btn-danger">Next</a>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/main-search-paging2.js"></script>
+<script src="~/js/Paging.js"></script>

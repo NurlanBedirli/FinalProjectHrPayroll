@@ -1,0 +1,360 @@
+﻿@using Microsoft.AspNetCore.Http
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>HrPayroll</title>
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700,900" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datetimepicker/4.17.47/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="fullcalendar/core/main.css" />
+    <link rel="tylesheet" href='fullcalendar/daygrid/main.css' />
+    <link rel="stylesheet" type="text/css" href="~/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/morris.css">
+    <link rel="stylesheet" type="text/css" href="~/css/select2.min.css">
+    <link rel="stylesheet" type="text/css" href="~/css/style.css">
+</head>
+<body>
+    <div class="main-wrapper">
+        <div class="header">
+            <!-- Header start -->
+            <div class="header-left">
+                <a href="index.html" class="logo">
+                    <span class="text-uppercase">Admin</span>
+                </a>
+            </div>
+            <div class="page-title-box float-left">
+                <h3 class="text-uppercase">Preschool</h3>
+            </div>
+            <a id="mobile_btn" class="mobile_btn float-left" href="#sidebar"><i class="fa fa-bars" aria-hidden="true"></i></a>
+            <ul class="nav user-menu float-right">
+                <li class="nav-item dropdown d-none d-sm-block">
+                    <a href="#" class="dropdown-toggle nav-link" data-toggle="dropdown"><i class="fa fa-bell"></i> <span class="badge badge-pill bg-primary float-right">3</span></a>
+                    <div class="dropdown-menu notifications">
+                        <div class="topnav-dropdown-header">
+                            <span>Notifications</span>
+                        </div>
+                        <div class="drop-scroll">
+                            <ul class="notification-list">
+                                <li class="notification-message">
+                                    <a href="activities.html">
+                                        <div class="media">
+                                            <span class="avatar">
+
+                                                <img alt="John Doe" src="~/img/user.jpg" class="~/img-fluid rounded-circle">
+
+                                            </span>
+                                            <div class="media-body">
+                                                <p class="noti-details"><span class="noti-title">John Doe</span> is now following you </p>
+                                                <p class="noti-time"><span class="notification-time">4 mins ago</span></p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="notification-message">
+                                    <a href="activities.html">
+                                        <div class="media">
+                                            <span class="avatar">T</span>
+                                            <div class="media-body">
+                                                <p class="noti-details"><span class="noti-title">Tarah Shropshire</span> sent you a message.</p>
+                                                <p class="noti-time"><span class="notification-time">6 mins ago</span></p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="notification-message">
+                                    <a href="activities.html">
+                                        <div class="media">
+                                            <span class="avatar">L</span>
+                                            <div class="media-body">
+                                                <p class="noti-details"><span class="noti-title">Misty Tison</span> like your photo.</p>
+                                                <p class="noti-time"><span class="notification-time">8 mins ago</span></p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="notification-message">
+                                    <a href="activities.html">
+                                        <div class="media">
+                                            <span class="avatar">G</span>
+                                            <div class="media-body">
+                                                <p class="noti-details"><span class="noti-title">Rolland Webber</span> booking appoinment for meeting.</p>
+                                                <p class="noti-time"><span class="notification-time">12 mins ago</span></p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                                <li class="notification-message">
+                                    <a href="activities.html">
+                                        <div class="media">
+                                            <span class="avatar">T</span>
+                                            <div class="media-body">
+                                                <p class="noti-details"><span class="noti-title">Bernardo Galaviz</span> like your photo.</p>
+                                                <p class="noti-time"><span class="notification-time">2 days ago</span></p>
+                                            </div>
+                                        </div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="topnav-dropdown-footer">
+                            <a href="activities.html">View all Notifications</a>
+                        </div>
+                    </div>
+                </li>
+                <li class="nav-item dropdown d-none d-sm-block">
+                    <a href="javascript:void(0);" id="open_msg_box" class="hasnotifications nav-link"><i class="fa fa-comment"></i> <span class="badge badge-pill bg-primary float-right">8</span></a>
+                </li>
+                <li class="nav-item dropdown has-arrow">
+                    <a href="#" class="dropdown-toggle nav-link user-link" data-toggle="dropdown">
+                        @if (Context.Session.GetObjectFromJson<SessionUserModel>("UserData") != null)
+                        {
+                            var data = Context.Session.GetObjectFromJson<SessionUserModel>("UserData");
+                            if (data.Photo != null)
+                            {
+                                <span class="user-img">
+                                    <img class="rounded-circle" src="~/img/@data.Photo" width="40" alt="Admin">
+                                    <span class="status online"></span>
+                                </span>
+                                <span>@data.Role</span>
+                            }
+                            else
+                            {
+                                <span class="user-img">
+                                    <img class="rounded-circle" src="~/img/user.jpg" width="40" alt="Admin">
+                                    <span class="status online"></span>
+                                </span>
+                                <span>@data.Role</span>
+                            }
+
+                        }
+                    </a>
+                    <div class="dropdown-menu">
+                        @*@if (User.IsInRole("Admin"))*@
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Profil" asp-area="Admin">My Profile</a>
+                        <a class="dropdown-item" asp-controller="Account" asp-action="Edit" asp-area="Admin">Edit Profile</a>
+                        <a class="dropdown-item" href="settings.html">Settings</a>
+                        <a class="dropdown-item" asp-controller="Account" asp-action="LogOut">Logout</a>
+                    </div>
+                </li>
+            </ul>
+            <div class="dropdown mobile-user-menu float-right">
+                <!-- mobile menu -->
+                <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                <div class="dropdown-menu dropdown-menu-right">
+                    <a class="dropdown-item" href="profile.html">My Profile</a>
+                    <a class="dropdown-item" href="edit-profile.html">Edit Profile</a>
+                    <a class="dropdown-item" href="settings.html">Settings</a>
+                    <a class="dropdown-item" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+        <div class="sidebar" id="sidebar">
+            <!-- sidebar -->
+            <div class="sidebar-inner slimscroll">
+                <div id="sidebar-menu" class="sidebar-menu">
+                    <ul>
+                        <li class="menu-title">Main</li>
+                        <li class="active">
+                            <a href="index.html"><i class="fa fa-tachometer" aria-hidden="true"></i> Dashboard</a>
+                        </li>
+                        <li class="submenu">
+                            <a href="#"><i class="fa fa-user" aria-hidden="true"></i><span>Employees</span> <span class="menu-arrow"></span></a>
+                            <ul class="list-unstyled" style="display: none;">
+                                <li><a asp-controller="Employee" asp-action="AllEmployee" asp-area="Admin">All Employee</a></li>
+                                <li><a asp-controller="Employee" asp-action="AddEmployee" asp-area="Admin">Add Employee</a></li>
+                                <li><a asp-controller="Employee" asp-action="EmployeeList" asp-area="Admin">List Employee</a></li>
+                            </ul>
+                        </li>
+                        <li class="submenu">
+                            <a href="#"><i class="fa fa-user" aria-hidden="true"></i> <span>Recruitment</span> <span class="menu-arrow"></span></a>
+                            <ul class="list-unstyled" style="display: none;">
+                                <li><a asp-controller="Reciurment" asp-action="EmployeeAll" asp-area="Admin">List Employee</a></li>
+                                <li><a asp-controller="Reciurment" asp-action="AllWorkPlaceEmployee" asp-area="Admin">Work Employee</a></li>
+                            </ul>
+                        </li>
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><i class="fa fa-share-alt" aria-hidden="true"></i> <span>Apps</span> <span class="menu-arrow"></span></a>
+                            <ul style="display: none;">
+                                <li class="submenu">
+                                    <a href="javascript:void(0);"><span>Email</span> <span class="menu-arrow"></span></a>
+                                    <ul style="display: none;">
+                                        <li><a href="compose.html"><span>Compose Mail</span></a></li>
+                                        <li>
+                                            <a href="inbox.html"> <span> Inbox</span> </a>
+                                        </li>
+                                        <li><a href="mail-view.html"><span>Mailview</span></a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="chat.html"> Chat <span class="badge badge-pill bg-primary float-right">5</span></a>
+                                </li>
+                                <li class="submenu">
+                                    <a href="#"><span> Calls</span> <span class="menu-arrow"></span></a>
+                                    <ul class="list-unstyled" style="display: none;">
+                                        <li><a href="voice-call.html">Voice Call</a></li>
+                                        <li><a href="video-call.html">Video Call</a></li>
+                                        <li><a href="incoming-call.html">Incoming Call</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="contacts.html"> Contacts</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="calendar.html" style="width: 80%; display: inline-block;"><i class="fa fa-calendar" aria-hidden="true"></i> Calendar</a>
+                        </li>
+                        <li>
+                            <a href="exam-list.html"><i class="fa fa-table" aria-hidden="true"></i> Exam list</a>
+                        </li>
+                        <li>
+                            <a href="holidays.html"><i class="fa fa-tasks" aria-hidden="true"></i> Holidays</a>
+                        </li>
+                        <li>
+                            <a href="calendar.html"><i class="fa fa-table" aria-hidden="true"></i> Events</a>
+                        </li>
+                        <li class="submenu">
+                            <a href="#"><i class="fa fa-book" aria-hidden="true"></i><span> Accounts </span> <span class="menu-arrow"></span></a>
+                            <ul class="list-unstyled" style="display: none;">
+                                <li><a href="invoices.html">Invoices</a></li>
+                                <li><a href="payments.html">Payments</a></li>
+                                <li><a href="expenses.html">Expenses</a></li>
+                                <li><a href="provident-fund.html">Provident Fund</a></li>
+                                <li><a href="taxes.html">Taxes</a></li>
+                            </ul>
+                        </li>
+                        <li class="submenu">
+                            <a href="#"><i class="fa fa-money" aria-hidden="true"></i><span> Payroll </span> <span class="menu-arrow"></span></a>
+                            <ul class="list-unstyled" style="display: none;">
+                                <li><a href="salary.html"> Employee Salary </a></li>
+                                <li><a href="salary-view.html"> Payslip </a></li>
+                            </ul>
+                        </li>
+                        <li class="submenu">
+                            <a href="#"><i class="fa fa-commenting-o" aria-hidden="true"></i> <span> Blog</span> <span class="menu-arrow"></span></a>
+                            <ul class="list-unstyled" style="display: none;">
+                                <li><a href="blog.html">Blog</a></li>
+                                <li><a href="blog-details.html">Blog View</a></li>
+                                <li><a href="add-blog.html">Add Blog</a></li>
+                                <li><a href="edit-blog.html">Edit Blog</a></li>
+                            </ul>
+                        </li>
+                        <li class="submenu">
+                            <a href="javascript:void(0);" class="noti-dot"><i class="fa fa-rocket" aria-hidden="true"></i> <span>Management </span> <span class="menu-arrow"></span></a>
+                            <ul style="display: none;">
+                                <li class="submenu">
+                                    <a href="#" class="noti-dot"><span> Employees</span> <span class="menu-arrow"></span></a>
+                                    <ul class="list-unstyled" style="display: none;">
+                                        <li><a href="all-employees.html">All Employees</a></li>
+                                        <li><a href="holidays.html">Holidays</a></li>
+                                        <li><a href="leaves.html"><span>Leave Requests</span> <span class="badge badge-pill bg-primary float-right">1</span></a></li>
+                                        <li><a href="attendance.html">Attendance</a></li>
+                                        <li><a href="departments.html">Departments</a></li>
+                                        <li><a href="designations.html">Designations</a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="activities.html">Activities</a>
+                                </li>
+                                <li>
+                                    <a href="users.html">Users</a>
+                                </li>
+                                <li class="submenu">
+                                    <a href="#"><span> Reports </span> <span class="menu-arrow"></span></a>
+                                    <ul class="list-unstyled" style="display: none;">
+                                        <li><a href="expense-reports.html"> Expense Report </a></li>
+                                        <li><a href="invoice-reports.html"> Invoice Report </a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="settings.html"><i class="fa fa-cog" aria-hidden="true"></i> Settings</a>
+                        </li>
+                        <li class="menu-title">UI Elements</li>
+                        <li class="submenu">
+                            <a href="#"><i class="fa fa-laptop" aria-hidden="true"></i> <span> Components</span> <span class="menu-arrow"></span></a>
+                            <ul class="list-unstyled" style="display: none;">
+                                <li><a href="uikit.html">UI Kit</a></li>
+                                <li><a href="typography.html">Typography</a></li>
+                                <li><a href="tabs.html">Tabs</a></li>
+                            </ul>
+                        </li>
+                        <li class="submenu">
+                            <a href="#"><i class="fa fa-edit" aria-hidden="true"></i> <span> Forms</span> <span class="menu-arrow"></span></a>
+                            <ul class="list-unstyled" style="display: none;">
+                                <li><a href="basic-inputs.html">Basic Input</a></li>
+                                <li><a href="form-basic-inputs.html">Basic Inputs</a></li>
+                                <li><a href="form-input-groups.html">Input Groups</a></li>
+                                <li><a href="form-horizontal.html">Horizontal Form</a></li>
+                                <li><a href="form-vertical.html">Vertical Form</a></li>
+                            </ul>
+                        </li>
+                        <li class="submenu">
+                            <a href="#"><i class="fa fa-table" aria-hidden="true"></i> <span> Tables</span> <span class="menu-arrow"></span></a>
+                            <ul class="list-unstyled" style="display: none;">
+                                <li><a href="tables-basic.html">Basic Tables</a></li>
+                                <li><a href="tables-datatables.html">Data Table</a></li>
+                            </ul>
+                        </li>
+                        <li class="menu-title">Extras</li>
+                        <li class="submenu">
+                            <a href="#"><i class="fa fa-columns" aria-hidden="true"></i> <span>Pages</span> <span class="menu-arrow"></span></a>
+                            <ul class="list-unstyled" style="display: none;">
+                                <li><a href="login.html"> Login </a></li>
+                                <li><a href="register.html"> Register </a></li>
+                                <li><a href="forgot-password.html"> Forgot Password </a></li>
+                                <li><a href="change-password2.html"> Change Password </a></li>
+                                <li><a href="lock-screen.html"> Lock Screen </a></li>
+                                <li><a href="profile.html"> Profile </a></li>
+                                <li><a href="gallery.html"> Gallery </a></li>
+                                <li><a href="error-404.html">404 Error </a></li>
+                                <li><a href="error-500.html">500 Error </a></li>
+                                <li><a href="blank-page.html"> Blank Page </a></li>
+                            </ul>
+                        </li>
+                        <li class="submenu">
+                            <a href="javascript:void(0);"><i class="fa fa-share-alt" aria-hidden="true"></i> <span>Multi Level</span> <span class="menu-arrow"></span></a>
+                            <ul style="display: none;">
+                                <li class="submenu">
+                                    <a href="javascript:void(0);"><span>Level 1</span> <span class="menu-arrow"></span></a>
+                                    <ul style="display: none;">
+                                        <li><a href="javascript:void(0);"><span>Level 2</span></a></li>
+                                        <li class="submenu">
+                                            <a href="javascript:void(0);"> <span> Level 2</span> <span class="menu-arrow"></span></a>
+                                            <ul class="list-unstyled" style="display: none;">
+                                                <li><a href="javascript:void(0);">Level 3</a></li>
+                                                <li><a href="javascript:void(0);">Level 3</a></li>
+                                            </ul>
+                                        </li>
+                                        <li><a href="javascript:void(0);"><span>Level 2</span></a></li>
+                                    </ul>
+                                </li>
+                                <li>
+                                    <a href="javascript:void(0);"><span>Level 1</span></a>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        @RenderBody()
+    </div>
+    <script type="text/javascript" src="~/js/jquery-3.2.1.min.js"></script>
+    <script type="text/javascript" src="~/js/popper.min.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="~/js/jquery.slimscroll.js"></script>
+    <script type="text/javascript" src="~/js/select2.min.js"></script>
+    <script type="text/javascript" src="~/js/moment.min.js"></script>
+    <script type="text/javascript" src="~/js/bootstrap-datetimepicker.min.js"></script>
+    <script type="text/javascript" src="~/js/morris.min.js"></script>
+    <script type="text/javascript" src="~/js/raphael/raphael-min.js"></script>
+    <script type="text/javascript" src="~/js/fullcalendar.min.js"></script>
+    <script type="text/javascript" src="~/js/jquery.fullcalendar.js"></script>
+    <script type="text/javascript" src="~/js/chart.js"></script>
+    <script type="text/javascript" src="~/js/app.js"></script>
+</body>
+</html>

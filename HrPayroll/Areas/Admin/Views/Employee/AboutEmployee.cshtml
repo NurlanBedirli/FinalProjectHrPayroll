@@ -1,0 +1,186 @@
+﻿
+@{
+    ViewData["Title"] = "AboutEmployee";
+}
+@model AboutEmployeeInformationModel
+<div class="page-wrapper">
+    <!-- content -->
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase">about Parents</h5>
+                </div>
+            </div>
+        </div>
+        <div class="content-page">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="aboutprofile-sidebar">
+                        <div class="row">
+                            <div class="col-lg-3 col-md-12 col-sm-12 col-12">
+                                <div class="aboutprofile">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                                    <div class="aboutprofile-pic" style="width:100px;">
+                                                        @if (Model.Employees.Photo != null)
+                                                        {
+                                                            <img class="card-img-top" src="~/img/@Model.Employees.Photo" alt="Card image">
+                                                        }
+                                                        else
+                                                        {
+                                                            <img class="card-img-top" src="~/img/user.jpg" alt="Card image">
+                                                        }
+                                                    </div>
+                                                    <div class="aboutprofile-name">
+                                                        <h5 class="text-center mt-2">@Model.Employees.Name @Model.Employees.Surname</h5>
+                                                        @if (Model.InfoWorkPlaces != null)
+                                                        {
+                                                            <p class="text-center" style="color:white;">@Model.InfoWorkPlaces.PositionName</p>
+                                                        }
+                                                    </div>
+                                                    <ul class="list-group list-group-flush">
+                                                        <li class="list-group-item"><b>Birth Day</b><a href="#" class="float-right">@Model.Employees.BirthDay.ToString("dd.MM.yyyy")</a></li>
+                                                        <li class="list-group-item"><b>Gender</b><a href="#" class="float-right">@Model.Employees.Gender</a></li>
+                                                        <li class="list-group-item"><b>Marital Status</b><a href="#" class="float-right">@Model.Employees.MaritalStatus</a></li>
+                                                    </ul>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="aboutme-profile mt-4">
+                                    <div class="card">
+                                        <div class="page-title">
+                                            <h4>Work Place</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <ul class="list-group list-group-flush">
+                                                @if (Model.InfoWorkPlaces != null)
+                                                {
+                                                    <li class="list-group-item"><b>Company</b><a href="#" class="float-right">@Model.InfoWorkPlaces.CompanyName</a></li>
+                                                    <li class="list-group-item"><b>Emperium</b><a href="#" class="float-right">@Model.InfoWorkPlaces.EmperiumName</a></li>
+                                                    <li class="list-group-item"><b>Departament</b><a href="#" class="float-right"> @Model.InfoWorkPlaces.DepartamentName</a></li>
+                                                    <li class="list-group-item"><b>Position</b><a href="#" class="float-right"> @Model.InfoWorkPlaces.PositionName</a></li>
+                                                    <li class="list-group-item"><b>Start Date</b><a href="#" class="float-right">@Model.InfoWorkPlaces.StartDate.ToString("dd.MM.yyyy")</a></li>
+                                                    <li class="list-group-item"><b>Salary</b><a href="#" class="float-right">@Model.InfoWorkPlaces.Salary <span> Azn</span></a></li>
+                                                }
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="aboutprofile-address mt-4">
+                                    <div class="card">
+                                        <div class="page-title">
+                                            <h4>Address</h4>
+                                        </div>
+                                        <div class="card-body">
+                                            <address class="text-center">
+                                                @Model.Employees.DistrictRegistration
+                                            </address>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-9 col-md-12 col-sm-12 col-12">
+                                <div class="profile-content">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="card">
+                                                <!-- Nav tabs -->
+                                                <ul class="nav customtab">
+                                                    <li class="nav-item"><a href="#" class="nav-link active show">About Me</a></li>
+                                                </ul>
+
+                                                <!-- Tab panes -->
+                                                <div class="tab-content">
+                                                    <div class="tab-pane active show">
+                                                        <div id="biography" class="biography">
+                                                            <div class="row">
+                                                                <div class="col-md-3 col-6">
+                                                                    <strong>Full Name</strong>
+                                                                    <br>
+                                                                    <p class="text-muted">@Model.Employees.Name @Model.Employees.Surname</p>
+                                                                </div>
+                                                                <div class="col-md-3 col-6">
+                                                                    <strong>Mobile</strong>
+                                                                    <br>
+                                                                    <p class="text-muted">@Model.Employees.Number</p>
+                                                                </div>
+                                                                <div class="col-md-3 col-6">
+                                                                    <strong>@Model.Employees.Email</strong>
+                                                                    <br>
+                                                                </div>
+                                                                <div class="col-md-3 col-6">
+                                                                    <strong>Nationally</strong>
+                                                                    <br>
+                                                                    <p class="text-muted">@Model.Employees.Nationally</p>
+                                                                </div>
+                                                            </div>
+                                                            <hr>
+                                                            <br>
+                                                            <h4>Education</h4>
+                                                            <hr>
+                                                            @foreach (var edu in Model.Educations)
+                                                            {
+                                                            <ul class="list-group list-group-flush">
+                                                                <li class="list-group-item"><span style="margin-right:15px;">Univercity Name:</span>@edu.UniversityName</li>
+                                                                <li class="list-group-item"><span style="margin-right:15px;">Univercity Faculty:</span>@edu.UniversityFaculty</li>
+                                                                <li class="list-group-item"><span style="margin-right:15px;">Year:</span><span>@edu.StartDate.Year</span>-----<span>@edu.EndDate.Year</span></li>
+                                                                <li class="list-group-item"><span style="margin-right:15px;">Status:</span>@edu.UniversityName</li>
+                                                                <li class="list-group-item" style="cursor:pointer;"> 
+                                                                <a class="btn btn-success" style="color:white;" asp-route-id="@edu.Id" asp-controller="Employee" asp-area="Admin" asp-action="EditEducationEmployee">Edit</a>
+                                                                <a asp-route-id="@edu.Id" asp-controller="Employee" asp-area="Admin" asp-action="DeleteEducationEmployee" style="color:white;" class="btn btn-danger" id="edit" data-whatever="mdo">Delete</a>
+                                                                </li>
+                                                            </ul>
+                                                            }
+                                                            <br>
+                                                            <h4>Old Work place</h4>
+                                                            <hr>
+                                                            @foreach (var edu in Model.OldWorkPlaces)
+                                                            {
+                                                            <ul class="list-group list-group-flush">
+
+                                                                <li class="list-group-item"><span style="margin-right:15px;">Company:</span>@edu.WorkCompany</li>
+                                                                <li class="list-group-item"><span style="margin-right:15px;">Position:</span>@edu.WorkPosition</li>
+                                                                <li class="list-group-item"><span style="margin-right:15px;">Year:</span><span>@edu.StarDate.Year</span>-----<span>@edu.EndDate.Year</span></li>
+                                                                <li class="list-group-item"><span style="margin-right:15px;">Work Status:</span>@edu.WorkStatus</li>
+                                                                <li class="list-group-item" style="cursor:pointer;"> 
+                                                                <a class="btn btn-success" style="color:white;" asp-route-id="@edu.Id" asp-controller="Employee" asp-area="Admin" asp-action="EditOldWork">Edit</a> 
+                                                                <a asp-route-id="@edu.Id" asp-controller="Employee" asp-area="Admin" asp-action="DeleteOldWork" style="color:white;" class="btn btn-danger" id="edit" data-whatever="mdo">Delete</a>
+                                                                </li>                                                               
+                                                            </ul>
+                                                            <br />
+                                                            <br />
+                                                            }
+                                                            <br>
+                                                            <h4>Conferences, Cources &amp; Workshop Attended</h4>
+                                                            <hr>
+                                                            <ul class="list-unstyled">
+                                                                <li class="list-item">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
+                                                                <li class="list-item">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
+                                                                <li class="list-item">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
+                                                                <li class="list-item">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
+                                                                <li class="list-item">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
+                                                                <li class="list-item">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
+                                                                <li class="list-item">Lorem Ipsum is simply dummy text of the printing and typesetting industry. </li>
+                                                            </ul>
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

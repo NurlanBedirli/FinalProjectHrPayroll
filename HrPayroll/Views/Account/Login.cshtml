@@ -1,0 +1,36 @@
+﻿@{
+    ViewData["Title"] = "Login";
+}
+@model UserLoginModel
+    <div class="account-page">
+        <div class="container">
+            <h3 class="account-title text-white">Login</h3>
+            <div class="account-box">
+                <div class="account-wrapper">
+                    <div class="account-logo">
+                       <h4 class="account-title text-white" style="color: aqua !important;">HrPayroll</h4>
+                    </div>
+                    <form asp-controller="Account" asp-action="Login" method="post">
+                        <div asp-validation-summary="ModelOnly"></div>
+                        <div class="form-group custom-mt-form-group">
+                            <input type="text" asp-for="UserNameOrEmail" name="UserNameOrEmail" />
+                            <label class="control-label">Username or Email</label><i class="bar"></i>
+                            <span asp-validation-for="UserNameOrEmail"></span>
+                        </div>
+                        <div class="form-group custom-mt-form-group">
+                            <input type="password" asp-for="Password" />
+                            <label class="control-label">Password</label><i class="bar"></i>
+                            <span asp-validation-for="Password"></span>
+                        </div>
+                        <div class="form-group text-center custom-mt-form-group">
+                            <button class="btn btn-primary btn-block account-btn" type="submit">Login</button>
+                        </div>
+                        <div class="text-center">
+                            <a asp-controller="Account" asp-action="ChangePass">Forgot your password?</a>
+                        </div>
+                    </form>
+            </div>
+        </div>
+    </div>
+</div>
+

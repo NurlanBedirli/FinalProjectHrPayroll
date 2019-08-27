@@ -1,0 +1,205 @@
+﻿
+@{
+    ViewData["Title"] = "AddNewWorkPlace";
+}
+@using HrPayroll.Areas.Admin.EmployeeModel
+@model WorkPlaceModel
+<div class="page-wrapper">
+    <!-- content -->
+    <div class="content container-fluid">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card">
+                        <div class="page-title">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                    @if (Context.Session.GetObjectFromJson<Employee>("Employ") != null)
+                                            {
+                                                var data = Context.Session.GetObjectFromJson<Employee>("Employ");
+             <div class="Page-title"><a asp-controller="Employee" asp-area="Admin" asp-action="AboutEmployee" asp-route-page="@data.Id" style="font-weight:bold">@data.Name @data.Surname</a> new Workplace</div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="">
+                                <form class="row"  method="post">
+                                    <div asp-validation-summary="ModelOnly"></div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-12" id="addnewWork">
+                                        <div class="form-group custom-mt-form-group">
+                                            <select asp-for="HoldingName" id="Holding">
+                                                @if (Context.Session.GetObjectFromJson<List<Holding>>("Holding") != null)
+                                                {
+                                                    var holdings = Context.Session.GetObjectFromJson<List<Holding>>("Holding");
+                                                    @foreach (var holding in holdings)
+                                                    {
+                                                        <option>@holding.Name</option>
+                                                    }
+                                                }
+                                            </select>
+                                            <span asp-validation-for="HoldingName"></span>
+                                            <label class="control-label">Holding</label><i class="bar"></i>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <select asp-for="CompanyName" id="companyName"></select>
+                                            <span asp-validation-for="CompanyName"></span>
+                                            <label class="control-label">Company</label><i class="bar"></i>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <select asp-for="EmporiaName" id="emporiaName"></select>
+                                            <span asp-validation-for="EmporiaName"></span>
+                                            <label class="control-label">Emporia</label><i class="bar"></i>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <select asp-for="PositionName" id="PositionName"></select>
+                                            <span asp-validation-for="PositionName"></span>
+                                            <label class="control-label">Position</label><i class="bar"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group custom-mt-form-group">
+                                            <select asp-for="DepartamentName" id="DepartamentName"></select>
+                                            <span asp-validation-for="DepartamentName"></span>
+                                            <label class="control-label">Departament</label><i class="bar"></i>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <input asp-for="StartDate" type="date">
+                                            <label class="control-label" asp-for="StartDate">Start Date</label><i class="bar"></i>
+                                            <span asp-validation-for="StartDate"></span>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <select asp-for="Salary" id="Salary"></select>
+                                            <span asp-validation-for="Salary"></span>
+                                            <label class="control-label">Salary</label><i class="bar"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group text-center custom-mt-form-group">
+                                            <button class="btn btn-primary mr-2" type="submit">Save</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () { 
+
+       var holding = $("#Holding option").val();
+
+        $.ajax({
+            url:"/Admin/Reciurment/AjaxHoldingComBox",
+            dataType: "Json",
+            type: "post",
+            data: {
+                value: holding
+            },
+            success: function (respons) {
+                if (respons.message == 202) {
+                    $("#emporiaName option").remove();
+                    $("#PositionName option").remove();
+                    $("#Salary option").remove();
+                    for (var i = 0; i < respons.company.length; i++) {
+                        var option = document.createElement('option');
+                        option.value = respons.company[i].id;
+                        option.innerText = respons.company[i].name;
+                        $("#companyName").append(option);
+                    }
+                }
+            }
+        });
+
+        $("#companyName").on("change", function () {
+            
+            $.ajax({
+                url: "/Admin/Reciurment/AjaxEmporiumComboBox",
+                dataType: "Json",
+                type: "post",
+                data: {
+                    id: $(this).val()
+                },
+                success: function (respons) {
+                    if (respons.message == 202) {
+                        $("#emporiaName option").remove();
+                        $("#PositionName option").remove();
+                        $("#DepartamentName option").remove();
+                        $("#Salary option").remove();
+                        for (var i = 0; i < respons.emporia.length; i++) {
+                            var option = document.createElement('option');
+                            option.value = respons.emporia[i].id;
+                            option.innerText = respons.emporia[i].name;
+                            $("#emporiaName").append(option);
+                        }
+                    }
+                }
+            });
+
+        });
+
+        $("#emporiaName").on("blur", function () {
+            
+            $.ajax({
+                url: "/Admin/Reciurment/AjaxPositionsComboBox",
+                dataType: "Json",
+                type: "post",
+                data: {
+                    id: $(this).val()
+                },
+                success: function (respons) {
+                    if (respons.message == 202) {
+                        $("#PositionName option").remove();
+                        $("#DepartamentName option").remove();
+                        $("#Salary option").remove();
+                        for (var i = 0; i < respons.positionss.length; i++) {
+                            var option = document.createElement('option');
+                            option.value = respons.positionss[i].id;
+                            option.innerText = respons.positionss[i].name;
+                            $("#PositionName").append(option);
+                        }
+                    }
+                }
+            });
+
+        });
+
+        $("#PositionName").on("change", function () {
+
+            $.ajax({
+                url: "/Admin/Reciurment/AjaxSalaryComboBox",
+                dataType: "Json",
+                type: "post",
+                data: {
+                    id: $(this).val()
+                },
+                success: function (respons) {
+                    if (respons.message == 202) {
+                        $("#Salary option").remove();
+                        $("#DepartamentName option").remove();
+                        for (var z = 0; z < respons.salary.length; z++) {
+                            var option1 = document.createElement('option');
+                            option1.value = respons.salary[z].id;
+                            option1.innerText = respons.salary[z].salary;
+                            $("#Salary").append(option1);
+                        }
+                        for (var i = 0; i < respons.departament.length; i++) {
+                            var option = document.createElement('option');
+                            option.value = respons.departament[i].id;
+                            option.innerText = respons.departament[i].name;
+                            $("#DepartamentName").append(option);
+                        }
+                    }
+                }
+            });
+
+        });
+
+
+
+    });
+</script>

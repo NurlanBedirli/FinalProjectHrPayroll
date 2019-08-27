@@ -1,0 +1,82 @@
+﻿
+@{
+    ViewData["Title"] = "AddEmployeeOldWorkPlace";
+}
+@using HrPayroll.Areas.Admin.EmployeeModel
+@model OldWorkPlace
+<div class="page-wrapper">
+    <!-- content -->
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase"></h5>
+                </div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card">
+                        <div class="page-title">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                    @if (Context.Session.GetObjectFromJson<Employee>("Employ") != null)
+                                    {
+                                        var data = Context.Session.GetObjectFromJson<Employee>("Employ");
+                                        <div class="page-title"><a style="color:chocolate; cursor:pointer;">@data.Name  @data.Surname</a> Add Education </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form class="row" method="post">
+                                        <div asp-validation-summary="ModelOnly"></div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group custom-mt-form-group">
+                                                <input type="text" name="WorkCompany" asp-for="WorkCompany" />
+                                                <label class="control-label" asp-for="WorkCompany">Old Work Company</label><i class="bar"></i>
+                                                <span asp-validation-for="WorkCompany"></span>
+                                            </div>
+                                            <div class="form-group custom-mt-form-group">
+                                                <input type="text" asp-for="WorkPosition" name="WorkPosition">
+                                                <label class="control-label" asp-for="WorkPosition">Old Work Position</label><i class="bar"></i>
+                                                <span asp-validation-for="WorkPosition"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <textarea id="message" class="form__field" rows="4" asp-for="WorkStatus" name="WorkStatus"></textarea>
+                                                <label for="message" class="form-label" asp-for="WorkStatus">Work Status</label>
+                                                <span asp-validation-for="WorkStatus"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group custom-mt-form-group">
+                                                <input asp-for="StarDate" type="date">
+                                                <label class="control-label" asp-for="StarDate">Start Date</label><i class="bar"></i>
+                                                <span asp-validation-for="StarDate"></span>
+                                            </div>
+                                            <div class="form-group custom-mt-form-group">
+                                                <input asp-for="EndDate" type="date">
+                                                <label class="control-label" asp-for="EndDate">End Date</label><i class="bar"></i>
+                                                <span asp-validation-for="EndDate"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <div class="form-group text-center custom-mt-form-group">
+                                                <button class="btn btn-primary mr-2" type="submit">Save</button>
+                                                <button class="btn btn-secondary" type="reset">Cancel</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

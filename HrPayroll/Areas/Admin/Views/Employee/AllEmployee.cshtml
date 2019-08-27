@@ -1,0 +1,457 @@
+﻿
+@{
+    ViewData["Title"] = "AllEmploy";
+}
+@using HrPayroll.Areas.Admin.PaginationModel
+@model PagingModel
+<div class="page-wrapper">
+    <!-- content -->
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase">All Employes</h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-4 col-3">
+            </div>
+            <div class="col-sm-8 col-9 text-right m-b-20">
+                <a asp-controller="Employee" asp-action="AddEmployee" asp-area="Admin" class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i> Add Employes</a>
+            </div>
+        </div>
+        <div class="content-page">
+
+            <div class="row filter-row">
+                <div class="col-sm-6 col-md-4">
+                    <div class="form-group custom-mt-form-group">
+                        <input type="text" id="name" />
+                        <label class="control-label">Employee Name</label><i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="form-group custom-mt-form-group">
+                        <input type="text" id="surname" />
+                        <label class="control-label">Employee Surname</label><i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-2">
+                    <div class="form-group custom-mt-form-group">
+                        <select id="pageItem" class="form-control">
+                            <option>8</option>
+                            <option>16</option>
+                            <option>32</option>
+                            <option>40</option>
+                        </select>
+                        <label class="control-label">Page Item</label><i class="bar"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div id="main-hidden" class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3" hidden>
+                <div class="profile-widget">
+                    <div class="profile-img">
+                        <a class="href-img" href="#"><img class="avatar" src="~/img/user.jpg" alt=""></a>
+                    </div>
+                    <div class="dropdown profile-action">
+                        <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                        <div class="dropdown-menu dropdown-menu-right">
+                            <a class="dropdown-item edit" name="edit" href="/Admin/Employee/EditEmployee/1">
+                                <i class="fa fa-pencil m-r-5"></i>
+                                Edit
+                            </a>
+                            <a class="dropdown-item about" name="about" href="/Admin/Employee/DeleteEmployee/1"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                        </div>
+                    </div>
+                    <h4 class="user-name m-t-10 m-b-0 text-ellipsis"><a class="name">Test Testov</a></h4>
+                    <div class="small text-muted birthday"></div>
+                </div>
+            </div>
+            <div class="row staff-grid-row" id="allemployee">
+                @foreach (var elm in Model.Employees)
+                {
+                    <div class="col-md-4 col-sm-6 col-12 col-lg-4 col-xl-3 main-hidden">
+                        <div class="profile-widget">
+                            <div class="profile-img">
+                                @if (elm.Photo != null)
+                                {
+                                    <a asp-controller="Employee" asp-area="Admin" asp-action="AboutEmployee" asp-route-page="@elm.Id"><img class="avatar" src="~/img/@elm.Photo" alt=""></a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Employee" asp-area="Admin" asp-action="AboutEmployee" asp-route-page="@elm.Id"><img class="avatar" src="~/img/user.jpg" alt=""></a>
+                                }
+                            </div>
+                            <div class="dropdown profile-action">
+                                <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                <div class="dropdown-menu dropdown-menu-right">
+                                    <a class="dropdown-item edit"  href="/Admin/Employee/EditEmployee/@elm.Id">
+                                        <i class="fa fa-pencil m-r-5"></i>
+                                        Edit
+                                    </a>
+                                    <a class="dropdown-item about"  href="/Admin/Employee/DeleteEmployee/@elm.Id"><i class="fa fa-trash-o m-r-5"></i> Delete</a>
+                                </div>
+                            </div>
+                            <h4 class="user-name m-t-10 m-b-0 text-ellipsis"><a asp-controller="Employee" asp-area="Admin" asp-action="AboutEmployee" asp-route-page="@elm.Id">@elm.Name @elm.Surname</a></h4>
+                            <div class="small text-muted">@elm.BirthDay.Date.ToString("dd.dd.yyyy")</div>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-5" style="margin-top:20px;">
+                <div class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate  aaaa">
+                        <ul class="pagination" id="paging">
+                            <li class="paginate_button page-item next" id="PagePrev" onclick="">
+                                @if (Model.Paging.Prev)
+                                {
+                                    <a id="allpag" name="@(Model.Paging.CurrentPage - 1)" style="margin-left: 5px; cursor: pointer; border-radius:35px;" class="page-link btn-danger">Prev</a>
+                                }
+                            </li>
+                            @for (int i = 1; i <= Model.Paging.PageCount; i++)
+                            {
+                                <li class="paginate_button page-item next" id="DataTables_Table_0_next" onclick="">
+                                    <a id="allpag" style="margin-left: 5px; cursor: pointer; border-radius:35px;" class="page-link">@i.ToString()</a>
+                                </li>
+                            }
+                            <li class="paginate_button page-item next" id="PageNext" onclick="">
+                                @if (Model.Paging.Next)
+                                {
+                                    <a name="@(Model.Paging.CurrentPage + 1)" id="allpag" style="margin-left: 5px; cursor: pointer; border-radius:35px;" class="page-link btn-danger">Next</a>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/Paging.js"></script>
+<script src="~/js/Employee.js"></script>
+<script>
+
+    document.addEventListener("DOMContentLoaded", function () {
+
+        var name = document.getElementById("name");
+        var surname = document.getElementById("surname");
+        var pagecount = document.getElementById("pageItem");
+        people = [];
+
+        document.addEventListener("keyup", function () {
+
+            var emp1 = new Employess()
+            emp1.name = name.value;
+            emp1.surname = surname.value;
+            var page = parseFloat(pagecount.value);
+
+            $.ajax({
+                url: "/Admin/Employee/AllEmployeeSearchAjax",
+                type: "Post",
+                dataType: "json",
+                data:
+                {
+                    emp: emp1,
+                    elmPage: page
+                },
+                success: function (response) {
+                    if (response.message == 202) {
+                        $("#allemployee div").remove();
+                        localStorage.clear();
+                        for (var i = 0; i < response.currentData.length; i++) {
+                            AllDataEmployee(response.currentData[i])
+                        }
+                        if (response.message == 202) {
+                            people = response.allData
+                        }
+                        $("#paging #DataTables_Table_0_next").remove();
+                        $("#paging li").remove();
+                        for (var i = 1; i <= response.pageCount; i++) {
+                            CreateSearchPaging(i);
+                        }
+                        if (response.nextElement) {
+                            $("#PageNext").remove();
+                            var pag = document.getElementById("paging");
+                            var li2 = document.createElement('li');
+                            li2.id = "PageNext";
+                            var a = document.createElement('a');
+                            a.setAttribute("class", "page-link btn-danger");
+                            a.style.borderRadius = "35px";
+                            a.id = "Search";
+                            a.style.cursor = "pointer";
+                            a.style.marginLeft = "5px";
+                            a.setAttribute("name", `${response.currentPage + 1}`);
+                            a.innerText = "Next";
+                            li2.append(a);
+                            pag.append(li2);
+                            if (response.currentPage <= 1) {
+                                $("#PagePrev").remove();
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+        $("#pageItem").on("change", function () {
+            var emp1 = new Employess()
+            emp1.name = name.value;
+            emp1.surname = surname.value;
+            var page = parseFloat(pagecount.value);
+
+            $.ajax({
+                url: "/Admin/Employee/AllEmployeeSearchAjax",
+                type: "Post",
+                dataType: "json",
+                data:
+                {
+                    emp: emp1,
+                    elmPage: page
+                },
+                success: function (response) {
+                    if (response.message == 202) {
+                        $("#allemployee div").remove();
+                        localStorage.clear();
+                        for (var i = 0; i < response.currentData.length; i++) {
+                            AllDataEmployee(response.currentData[i])
+                        }
+                        if (response.message == 202) {
+                            people = response.allData
+                        }
+                        $("#paging #DataTables_Table_0_next").remove();
+                        $("#paging li").remove();
+                        for (var i = 1; i <= response.pageCount; i++) {
+                            CreateSearchPaging(i);
+                        }
+                        if (response.nextElement) {
+                            $("#PageNext").remove();
+                            var pag = document.getElementById("paging");
+                            var li2 = document.createElement('li');
+                            li2.id = "PageNext";
+                            var a = document.createElement('a');
+                            a.setAttribute("class", "page-link btn-danger");
+                            a.style.borderRadius = "35px";
+                            a.id = "Search";
+                            a.style.cursor = "pointer";
+                            a.style.marginLeft = "5px";
+                            a.setAttribute("name", `${response.currentPage + 1}`);
+                            a.innerText = "Next";
+                            li2.append(a);
+                            pag.append(li2);
+                            if (response.currentPage <= 1) {
+                                $("#PagePrev").remove();
+                            }
+                        }
+                    }
+                }
+            });
+
+        });
+
+
+        $("#paging").on("click", "li #Search", function () {
+            var pageCount = parseInt($(this).text());
+            var pageCount1 = parseInt($(this).attr('name'));
+
+            var page = 0;
+            if (!isNaN(pageCount)) {
+                page = pageCount;
+            }
+            if (!isNaN(pageCount1)) {
+                page = pageCount1;
+            }
+
+            var model = new PagingModel();
+            model.currentpage = page;
+            model.itempage = parseFloat(pagecount.value);
+            model.prev = page > 1;
+
+            var people1 = people;
+            model.totalitems = Math.ceil(people1.length / model.itempage);
+            model.next = page < model.totalitems;
+
+            var z = parseInt((page - 1) * model.itempage);
+            var az = z + model.itempage;
+            $("#allemployee div").remove();
+            for (var i = z; i <= people1.length; i++) {
+                if (i < az && i != people1.length) {
+                    AllDataEmployee(people1[i])
+                }
+            }
+            PrevNextPagination(model);
+        });
+
+        $("#paging").on("click", "li #allpag", function () {
+            var pageCount = parseInt($(this).text());
+            var pageCount1 = parseInt($(this).attr('name'));
+            var page = parseFloat(pagecount.value);
+
+            if (!isNaN(pageCount)) {
+                pageCount = pageCount;
+            }
+            if (!isNaN(pageCount1)) {
+                pageCount = pageCount1;
+            }
+            $.ajax({
+                url: "/Admin/Employee/PagingAjax/",
+                type: "post",
+                dataType: "JSON",
+                data: {
+                    count: pageCount,
+                    elmPage: page
+                },
+                success: function (response) {
+                    if (response.message == 202) {
+                        $("#allemployee div").remove();
+                        for (var i = 0; i < response.currentData.length; i++) {
+                            AllDataEmployee(response.currentData[i])
+                        }
+                        if (response.prevElement) {
+                            $("#PagePrev").remove();
+                            var pag = document.getElementById("paging");
+                            var li2 = document.createElement('li');
+                            li2.id = "PagePrev";
+                            var a = document.createElement('a');
+                            a.setAttribute("class", "page-link btn-danger");
+                            a.style.borderRadius = "35px";
+                            a.id = "allpag";
+                            a.style.cursor = "pointer";
+                            a.style.marginLeft = "5px";
+                            a.setAttribute("name", `${response.currentPage - 1}`);
+                            a.innerText = "Prev";
+                            li2.append(a);
+                            pag.append(li2);
+                            if (response.currentPage == response.pageCount) {
+                                $("#PageNext").remove();
+                            }
+                        }
+                        $("#paging #DataTables_Table_0_next").remove();
+                        for (var i = 1; i <= response.pageCount; i++) {
+                            CreatePaging(i)
+                        }
+                        if (response.nextElement) {
+                            $("#PageNext").remove();
+                            var pag = document.getElementById("paging");
+                            var li2 = document.createElement('li');
+                            li2.id = "PageNext";
+                            var a = document.createElement('a');
+                            a.setAttribute("class", "page-link btn-danger");
+                            a.style.borderRadius = "35px";
+                            a.id = "allpag";
+                            a.style.cursor = "pointer";
+                            a.style.marginLeft = "5px";
+                            a.setAttribute("name", `${response.currentPage + 1}`);
+                            a.innerText = "Next";
+                            li2.append(a);
+                            pag.append(li2);
+                            if (response.currentPage <= 1) {
+                                $("#PagePrev").remove();
+                            }
+                        }
+                    }
+                }
+            });
+        });
+
+
+        function AllDataEmployee(n) {
+            var content = $("#main-hidden").clone();
+            content.removeAttr("hidden");
+            content.find("a.href-img").attr("href", `/Admin/Employee/AboutEmployee?page=${n.id}`);
+            content.find("a.name").text(`${n.name}  ${n.surname}`);
+            content.find("a.name").attr("href", `/Admin/Employee/AboutEmployee?page=${n.id}`);
+            content.find("a.edit").attr("href", `/Admin/Employee/EditEmployee/${n.id}`);
+            content.find("a.about").attr("href", `/Admin/Employee/DeleteEmployee/${n.id}`);
+            content.find("div.birthday").text(`${n.birthDay}`);
+            if (n.photo != null) {
+                content.find("img.avatar").attr("src", `/img/${n.photo}`);
+            }
+            else {
+                content.find("img.avatar").attr("src", `/img/user.jpg`);
+            }
+            $("#allemployee").append(content);
+        }
+
+        function CreatePaging(n) {
+            var pag = document.getElementById("paging");
+            var li = document.createElement('li');
+            li.setAttribute("class", "paginate_button page-item next");
+            li.style.marginLeft = "5px";
+            li.style.cursor = "pointer";
+            li.id = "DataTables_Table_0_next";
+            var a = document.createElement('a');
+            a.setAttribute("class", "page-link");
+            a.style.borderRadius = "35px";
+            a.id = "allpag";
+            a.innerText = n;
+            li.append(a);
+            pag.append(li);
+        }
+
+        function CreateSearchPaging(n) {
+            var pag = document.getElementById("paging");
+            var li = document.createElement('li');
+            li.setAttribute("class", "paginate_button page-item next");
+            li.style.marginLeft = "5px";
+            li.style.cursor = "pointer";
+            li.id = "DataTables_Table_0_next";
+            var a = document.createElement('a');
+            a.setAttribute("class", "page-link");
+            a.style.borderRadius = "35px";
+            a.id = "Search";
+            a.innerText = n;
+            li.append(a);
+            pag.append(li);
+        }
+
+        function PrevNextPagination(n) {
+            if (n.prev) {
+                $("#PagePrev").remove();
+                var pag = document.getElementById("paging");
+                var li2 = document.createElement('li');
+                li2.id = "PagePrev";
+                var a = document.createElement('a');
+                a.setAttribute("class", "page-link btn-danger");
+                a.style.borderRadius = "35px";
+                a.id = "Search";
+                a.style.cursor = "pointer";
+                a.style.marginLeft = "5px";
+                a.setAttribute("name", `${n.currentpage - 1}`);
+                a.innerText = "Prev";
+                li2.append(a);
+                pag.append(li2);
+                if (n.currentpage == n.totalitems) {
+                    $("#PageNext").remove();
+                }
+            }
+            $("#paging #DataTables_Table_0_next").remove();
+            for (var i = 1; i <= n.totalitems; i++) {
+                CreateSearchPaging(i);
+            }
+            if (n.next) {
+                $("#PageNext").remove();
+                var pag = document.getElementById("paging");
+                var li2 = document.createElement('li');
+                li2.id = "PageNext";
+                var a = document.createElement('a');
+                a.setAttribute("class", "page-link btn-danger");
+                a.style.borderRadius = "35px";
+                a.id = "Search";
+                a.style.cursor = "pointer";
+                a.style.marginLeft = "5px";
+                a.setAttribute("name", `${n.currentpage + 1}`);
+                a.innerText = "Next";
+                li2.append(a);
+                pag.append(li2);
+                if (n.currentpage <= 1) {
+                    $("#PagePrev").remove();
+                }
+            }
+        }
+
+    });
+</script>
+
