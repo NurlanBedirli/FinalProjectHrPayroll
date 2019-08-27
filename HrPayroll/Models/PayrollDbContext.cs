@@ -28,5 +28,9 @@ namespace HrPayroll.Models
         public DbSet<EmporiumPosition> EmporiumPositions { get; set; }
         public DbSet<WorkPlace> Placeswork { get; set; }
         public DbSet<WorkEndDate> WorkEnds { get;set; }
+        public DbSet<EmployeeNotWorkReason> NotWorkReasons { get; set; }
+        public DbSet<EmployeeNotWorkReasonStatus> WorkReasonStatuses { get; set; }
+        public DbSet<EmporiumAppUserMenecer> EmporiumAppUsers { get; set; }
+        public DbSet<EmployeeAttandance> EmployeeAttandances { get; set; }
     }
 }

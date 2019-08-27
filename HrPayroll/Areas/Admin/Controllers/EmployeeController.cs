@@ -529,7 +529,6 @@ namespace HrPayroll.Areas.Admin.Controllers
                 Next = page < pageCount
             };
 
-
             var data = await dbContext.Employees.Skip((paging1.CurrentPage - 1) * paging1.ItemPage).Take(paging1.ItemPage).ToListAsync();
 
             PagingModel paging = new PagingModel

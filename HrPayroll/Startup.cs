@@ -34,7 +34,7 @@ namespace HrPayroll
                      
 
             services.AddDbContext<PayrollDbContext>(x =>
-          {
+            {
                 x.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 

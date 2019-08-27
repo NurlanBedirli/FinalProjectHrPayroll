@@ -496,7 +496,22 @@
         }
     });
 
-  
+
+    $("#tbody").on("click", "tbody tr td div #attadence ", function () {
+        var id = $(this).val();
+
+        if ($(this).prop("checked") == true) {
+            var elm1 = document.querySelector(".showw1");
+            elm1.querySelector("a").setAttribute("href", "/Admin/Menecer/WorkAttendance/" + id);
+        }
+        else
+        {
+            var elm1 = document.querySelector(".showw1");
+            elm1.style.display = "none";
+        }
+    });
+
+
 });
         
         

@@ -4,14 +4,16 @@ using HrPayroll.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HrPayroll.Migrations
 {
     [DbContext(typeof(PayrollDbContext))]
-    partial class PayrollDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190827111910_notworkReason")]
+    partial class notworkReason
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,25 +194,6 @@ namespace HrPayroll.Migrations
                     b.ToTable("Employees");
                 });
 
-            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmployeeAttandance", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("EmployeeId");
-
-                    b.Property<int>("NotWorkReasonId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.HasIndex("NotWorkReasonId");
-
-                    b.ToTable("EmployeeAttandances");
-                });
-
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmployeeNotWorkReason", b =>
                 {
                     b.Property<int>("Id")
@@ -219,31 +202,11 @@ namespace HrPayroll.Migrations
 
                     b.Property<string>("Name");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("NotWorkReasons");
-                });
-
-            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmployeeNotWorkReasonStatus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("EmployeeNotWorkReasonId");
-
-                    b.Property<decimal>("PenaltyAmount");
-
-                    b.Property<DateTime>("PenaltyDate")
-                        .HasColumnType("date");
-
                     b.Property<string>("Status");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeNotWorkReasonId");
-
-                    b.ToTable("WorkReasonStatuses");
+                    b.ToTable("NotWorkReasons");
                 });
 
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmployeeSalary", b =>
@@ -282,25 +245,6 @@ namespace HrPayroll.Migrations
                     b.HasIndex("CompanyId");
 
                     b.ToTable("Emporia");
-                });
-
-            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmporiumAppUserMenecer", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AppUserId");
-
-                    b.Property<int>("EmporiumId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasIndex("EmporiumId");
-
-                    b.ToTable("EmporiumAppUsers");
                 });
 
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmporiumPosition", b =>
@@ -618,27 +562,6 @@ namespace HrPayroll.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
-            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmployeeAttandance", b =>
-                {
-                    b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("HrPayroll.Areas.Admin.Models.EmployeeNotWorkReason", "NotWorkReason")
-                        .WithMany()
-                        .HasForeignKey("NotWorkReasonId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmployeeNotWorkReasonStatus", b =>
-                {
-                    b.HasOne("HrPayroll.Areas.Admin.Models.EmployeeNotWorkReason", "EmployeeNotWorkReason")
-                        .WithMany("WorkReasonStatuses")
-                        .HasForeignKey("EmployeeNotWorkReasonId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmployeeSalary", b =>
                 {
                     b.HasOne("HrPayroll.Areas.Admin.Models.Positions", "Positions")
@@ -652,18 +575,6 @@ namespace HrPayroll.Migrations
                     b.HasOne("HrPayroll.Areas.Admin.Models.Company", "Company")
                         .WithMany("Emporia")
                         .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmporiumAppUserMenecer", b =>
-                {
-                    b.HasOne("HrPayroll.Models.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId");
-
-                    b.HasOne("HrPayroll.Areas.Admin.Models.Emporium", "Emporium")
-                        .WithMany()
-                        .HasForeignKey("EmporiumId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

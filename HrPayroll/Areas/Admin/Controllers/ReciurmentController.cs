@@ -190,6 +190,7 @@ namespace HrPayroll.Areas.Admin.Controllers
 
             return Json(new { company = companyName, message = 202 });
         }
+
         public async Task<JsonResult> AjaxEmporiumComboBox(int? id)
         {
            if (id !=null)
@@ -208,6 +209,7 @@ namespace HrPayroll.Areas.Admin.Controllers
             }
             
         }
+
         public async Task<JsonResult> AjaxPositionsComboBox(int? id)
         {
             if (id != null)
@@ -238,6 +240,7 @@ namespace HrPayroll.Areas.Admin.Controllers
             }
 
         }
+
         public async Task<JsonResult> AjaxSalaryComboBox(int? id)
         {
             if(id != null)
@@ -330,7 +333,6 @@ namespace HrPayroll.Areas.Admin.Controllers
              return Json(new {currentData = pagingemployee,message = 202,prevElement = paging1.Prev, nextElement = paging1.Next, pageCount = pageCount, currentPage = paging1.CurrentPage });
         }
 
-
         public async Task<JsonResult> SearchWorkPlace(string value,decimal salary,int elmPage )
         {
             int? page = 1;
@@ -360,7 +362,6 @@ namespace HrPayroll.Areas.Admin.Controllers
                                         || x.Name.Contains(value) || x.Name.StartsWith(value)
                                            || x.PlasierCode.Contains(value) || x.PlasierCode.StartsWith(value)
                                               || x.Salary == salary).ToList();
-
 
                 paging.TotalItems = searchData.Count();
                 pageCount = Math.Ceiling(searchData.Count() / (decimal)elmpage);
