@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using HrPayroll.Areas.Admin.AttandanceModel;
 using HrPayroll.Areas.Admin.Models;
 using HrPayroll.Areas.Admin.PaginationModel;
 using HrPayroll.Models;
@@ -73,6 +74,13 @@ namespace HrPayroll.Areas.Admin.Controllers
             await Task.Delay(0);
             return View();
         }
+
+        public async Task<ActionResult> Attandance()
+        {
+            await Task.Delay(0);
+            return View();
+        }
+
 
         [HttpPost]
         public async Task<JsonResult> PagingMenecmentAjax(string count, int elmPage)

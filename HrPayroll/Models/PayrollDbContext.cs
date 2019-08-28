@@ -1,4 +1,5 @@
-﻿using HrPayroll.Areas.Admin.EmployeeModel;
+﻿using HrPayroll.Areas.Admin.AttandanceModel;
+using HrPayroll.Areas.Admin.EmployeeModel;
 using HrPayroll.Areas.Admin.Models;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
@@ -32,5 +33,6 @@ namespace HrPayroll.Models
         public DbSet<EmployeeNotWorkReasonStatus> WorkReasonStatuses { get; set; }
         public DbSet<EmporiumAppUserMenecer> EmporiumAppUsers { get; set; }
         public DbSet<EmployeeAttandance> EmployeeAttandances { get; set; }
+        public DbSet<SignInTbl> SignInTbls { get; set; }
     }
 }

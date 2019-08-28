@@ -4,14 +4,16 @@ using HrPayroll.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HrPayroll.Migrations
 {
     [DbContext(typeof(PayrollDbContext))]
-    partial class PayrollDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190828131716_signInTbl")]
+    partial class signInTbl
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -234,11 +236,11 @@ namespace HrPayroll.Migrations
 
                     b.Property<decimal>("PenaltyAmount");
 
+                    b.Property<DateTime>("PenaltyDate");
+
                     b.Property<string>("Status");
 
-                    b.Property<bool>("signOut");
-
-                    b.Property<DateTime>("signOutDate");
+                    b.Property<bool>("signIn");
 
                     b.HasKey("Id");
 
@@ -367,25 +369,6 @@ namespace HrPayroll.Migrations
                     b.HasIndex("PositionsId");
 
                     b.ToTable("PositionsDepartaments");
-                });
-
-            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.SignInTbl", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("EmployeeId");
-
-                    b.Property<bool>("SignIn");
-
-                    b.Property<DateTime>("SignInTime");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("SignInTbls");
                 });
 
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.WorkEndDate", b =>
@@ -710,14 +693,6 @@ namespace HrPayroll.Migrations
                     b.HasOne("HrPayroll.Areas.Admin.Models.Positions", "Positions")
                         .WithMany()
                         .HasForeignKey("PositionsId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.SignInTbl", b =>
-                {
-                    b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
-                        .WithMany()
-                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 

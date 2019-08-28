@@ -12,9 +12,8 @@ namespace HrPayroll.Areas.Admin.Models
         public int Id { get; set; }
         public string Status { get; set; }
         public decimal PenaltyAmount { get; set; }
-        [Column(TypeName = "date")]
-        [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
-        public DateTime PenaltyDate { get; set; }
+        public DateTime signOutDate { get; set; }
+        public bool signOut { get; set; }
         public EmployeeNotWorkReason EmployeeNotWorkReason { get; set; }
         public int EmployeeNotWorkReasonId { get; set; }
     }
