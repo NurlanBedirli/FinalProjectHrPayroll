@@ -2078,7 +2078,9 @@ blockquote p {font-style: italic;font-weight: 400;}
         }
     }
 }
-
+.table-attandance tr th {
+    font-size: 12px !important;
+}
 
 
 

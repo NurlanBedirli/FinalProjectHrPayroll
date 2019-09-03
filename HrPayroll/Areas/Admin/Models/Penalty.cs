@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 
 namespace HrPayroll.Areas.Admin.Models
 {
-    public class EmployeeAttandance
+    public class Penalty
     {
         public int Id { get; set; }
+        public decimal Amount { get; set; }
+        public DateTime Date { get; set; }
         public Employee Employee { get; set; }
         public int EmployeeId { get; set; }
-        public EmployeeNotWorkReason NotWorkReason { get; set; }
-        public int NotWorkReasonId { get; set; }
     }
 }

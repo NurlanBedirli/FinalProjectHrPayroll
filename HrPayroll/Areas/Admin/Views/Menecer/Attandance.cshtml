@@ -1,9 +1,10 @@
-﻿@{
+﻿@using HrPayroll.Models
+@{
     ViewData["Title"] = "Attandance";
     var dateDay = DateTime.DaysInMonth(DateTime.Now.Year,DateTime.Now.Month);
 }
-
-
+@using HrPayroll.Areas.Admin.MenecerAttandanceModel
+@model AttandanceTable
 <div class="page-wrapper">
     <!-- content -->
     <div class="content container-fluid">
@@ -61,635 +62,122 @@
                         <a href="#" class="btn btn-success btn-block"> Search </a>
                     </div>
                 </div>
+                <div class="col-sm-5 col-md-3" style="margin-bottom:2%; cursor:pointer; color:white;">
+                    <div class="show1" id="attadence" style="display:none">
+                        <a class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i>Attendance Penalty</a>
+                    </div>
+                </div>
             </div>
             <div class="row">
                 <div class="col-lg-12">
-                    <div class="table-responsive">
-                        <table class="table table-striped custom-table m-b-0">
+                    <div class="table-responsive table-attandance">
+                        <div asp-validation-summary="ModelOnly"></div>
+                        <table class="table table-striped custom-table m-b-0" id="table-attandance">
                             <thead>
                                 <tr>
                                     <th>Employee</th>
-                                    @for (var i = 1; i < dateDay; i++)
+                                    @for (var i = 1; i <= dateDay; i++)
                                     {
                                         <th>@i</th>
                                     }
+                                        <th><input value="2-5Day" style="width: 41px;" /></th>
+                                        <th class="action-attandance" style="font-size: 9px !important; padding: 3px">Action</th>
                                 </tr>
                             </thead>
                             <tbody>
+                                @foreach (var emp in Model.attendances)
+                                {
+                                    int count = 0;
+                                    var name = emp.Select(x => x.Name).FirstOrDefault();
+                                    var surname = emp.Select(x => x.Surname).FirstOrDefault();
+                                    var Id = emp.Select(x => x.EmployeeId).FirstOrDefault();
                                 <tr>
-                                    <td>Ruth C. Gault</td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td>
-                                        <div class="half-day"><span class="First-off"><i class="fa fa-check text-success"></i></span> <span class="First-off"><i class="fa fa-close text-danger"></i></span></div>
-                                    </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td>
-                                        <div class="half-day"><span class="First-off"><i class="fa fa-close text-danger"></i></span> <span class="First-off"><i class="fa fa-check text-success"></i></span></div>
-                                    </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
+                                    <td>@name @surname</td>
+                                    @for (int i = 1; i <= dateDay; i++)
+                                            {
+                                                var data = emp.Where(x => x.AttandanceDate.Day == i).FirstOrDefault();
+                                                if (data != null)
+                                                {
+                                                    if (data.SignIn == true)
+                                                    {
+                                                        count = 0;
+                                                <td><i class="fa fa-check text-success"></i></td>
+                                            }
+                                            else
+                                            {
+                                                var absent = Model.AbsentCount.Where(x => x.EmployeeId == Id).FirstOrDefault();
+                                                if (absent != null)
+                                                {
+                                                    if (absent.DateTime.Day < i)
+                                                    {
+                                                        count++;
+                                                        <td><i class="fa fa-close text-danger"></i></td>
+                                                    }
+                                                    else
+                                                    {
+                                                        count++;
+                                                        <td><i class="fa fa-close text-danger"></i></td>
+                                                    }
+                                                }
+                                                else
+                                                {
+                                                    <td><i class="fa fa-close text-danger"></i></td>
+                                                    count++;
+                                                }
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <td><i class="fa fa-info-circle"></i></td>
+                                        }
+                                    }
+                                    @if (count >= 2 || count <= 5)
+                                    {
+                                        <td id="workCount">@count</td>
+                                        <td><input type="checkbox" id="attendanceCheck" value="@Id" /></td>
+                                    }
+                                    else
+                                    {
+                                        <td><i class="fa fa-info-circle"></i></td>
+                                        <td><input type="checkbox" id="attendanceCheck" value="@Id" /></td>
+                                    }
                                 </tr>
-                                <tr>
-                                    <td>Richard Miles</td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                </tr>
-                                <tr>
-                                    <td>John Smith</td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                </tr>
-                                <tr>
-                                    <td>Mike Litorus</td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                </tr>
-                                <tr>
-                                    <td>Wilmer Deluna</td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                </tr>
-                                <tr>
-                                    <td>Jeffrey Warden</td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                </tr>
-                                <tr>
-                                    <td>Bernardo Galaviz</td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                </tr>
-                                <tr>
-                                    <td>Lesley Grauer</td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                </tr>
-                                <tr>
-                                    <td>Jeffery Lalor</td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                </tr>
-                                <tr>
-                                    <td>Loren Gatlin</td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                </tr>
-                                <tr>
-                                    <td>Tarah Shropshire</td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                </tr>
-                                <tr>
-                                    <td>Richard Miles</td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-close text-danger"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                    <td><i class="fa fa-check text-success"></i> </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                }
+                                @foreach (var item in Model.employeeAttendances)
+                                {
+                                    <tr>
+                                        <td>@item.Name @item.Surname</td>
+                                        @for (int i = 1; i <= dateDay; i++)
+                                        {
+                                            <td><i class="fa fa-exclamation-circle"></i></td>
+                                        }
+                                    </tr>
+                                }
+                                </tbody>
+                            </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    <div class="notification-box">
-        <div class="msg-sidebar notifications msg-noti">
-            <div class="topnav-dropdown-header">
-                <span>Messages</span>
-            </div>
-            <div class="drop-scroll msg-list-scroll">
-                <ul class="list-box">
-                    <li>
-                        <a href="chat.html">
-                            <div class="list-item">
-                                <div class="list-left">
-                                    <span class="avatar">R</span>
-                                </div>
-                                <div class="list-body">
-                                    <span class="message-author">Richard Miles </span>
-                                    <span class="message-time">12:28 AM</span>
-                                    <div class="clearfix"></div>
-                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="chat.html">
-                            <div class="list-item new-message">
-                                <div class="list-left">
-                                    <span class="avatar">J</span>
-                                </div>
-                                <div class="list-body">
-                                    <span class="message-author">Ruth C. Gault</span>
-                                    <span class="message-time">1 Aug</span>
-                                    <div class="clearfix"></div>
-                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="chat.html">
-                            <div class="list-item">
-                                <div class="list-left">
-                                    <span class="avatar">T</span>
-                                </div>
-                                <div class="list-body">
-                                    <span class="message-author"> Tarah Shropshire </span>
-                                    <span class="message-time">12:28 AM</span>
-                                    <div class="clearfix"></div>
-                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="chat.html">
-                            <div class="list-item">
-                                <div class="list-left">
-                                    <span class="avatar">M</span>
-                                </div>
-                                <div class="list-body">
-                                    <span class="message-author">Mike Litorus</span>
-                                    <span class="message-time">12:28 AM</span>
-                                    <div class="clearfix"></div>
-                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="chat.html">
-                            <div class="list-item">
-                                <div class="list-left">
-                                    <span class="avatar">C</span>
-                                </div>
-                                <div class="list-body">
-                                    <span class="message-author"> Catherine Manseau </span>
-                                    <span class="message-time">12:28 AM</span>
-                                    <div class="clearfix"></div>
-                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="chat.html">
-                            <div class="list-item">
-                                <div class="list-left">
-                                    <span class="avatar">D</span>
-                                </div>
-                                <div class="list-body">
-                                    <span class="message-author"> Domenic Houston </span>
-                                    <span class="message-time">12:28 AM</span>
-                                    <div class="clearfix"></div>
-                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="chat.html">
-                            <div class="list-item">
-                                <div class="list-left">
-                                    <span class="avatar">B</span>
-                                </div>
-                                <div class="list-body">
-                                    <span class="message-author"> Buster Wigton </span>
-                                    <span class="message-time">12:28 AM</span>
-                                    <div class="clearfix"></div>
-                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="chat.html">
-                            <div class="list-item">
-                                <div class="list-left">
-                                    <span class="avatar">R</span>
-                                </div>
-                                <div class="list-body">
-                                    <span class="message-author"> Rolland Webber </span>
-                                    <span class="message-time">12:28 AM</span>
-                                    <div class="clearfix"></div>
-                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="chat.html">
-                            <div class="list-item">
-                                <div class="list-left">
-                                    <span class="avatar">C</span>
-                                </div>
-                                <div class="list-body">
-                                    <span class="message-author"> Claire Mapes </span>
-                                    <span class="message-time">12:28 AM</span>
-                                    <div class="clearfix"></div>
-                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="chat.html">
-                            <div class="list-item">
-                                <div class="list-left">
-                                    <span class="avatar">M</span>
-                                </div>
-                                <div class="list-body">
-                                    <span class="message-author">Melita Faucher</span>
-                                    <span class="message-time">12:28 AM</span>
-                                    <div class="clearfix"></div>
-                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="chat.html">
-                            <div class="list-item">
-                                <div class="list-left">
-                                    <span class="avatar">J</span>
-                                </div>
-                                <div class="list-body">
-                                    <span class="message-author">Jeffery Lalor</span>
-                                    <span class="message-time">12:28 AM</span>
-                                    <div class="clearfix"></div>
-                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="chat.html">
-                            <div class="list-item">
-                                <div class="list-left">
-                                    <span class="avatar">L</span>
-                                </div>
-                                <div class="list-body">
-                                    <span class="message-author">Loren Gatlin</span>
-                                    <span class="message-time">12:28 AM</span>
-                                    <div class="clearfix"></div>
-                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                    <li>
-                        <a href="chat.html">
-                            <div class="list-item">
-                                <div class="list-left">
-                                    <span class="avatar">T</span>
-                                </div>
-                                <div class="list-body">
-                                    <span class="message-author">Tarah Shropshire</span>
-                                    <span class="message-time">12:28 AM</span>
-                                    <div class="clearfix"></div>
-                                    <span class="message-content">Lorem ipsum dolor sit amet, consectetur adipiscing</span>
-                                </div>
-                            </div>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-            <div class="topnav-dropdown-footer">
-                <a href="chat.html">See all messages</a>
-            </div>
-        </div>
-    </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () { 
+
+        $("#table-attandance").on("click", "tbody tr td #attendanceCheck", function () {
+            var id = $(this).val();
+            var count = $(this).closest('td').prev('td').text();
+            if ($(this).prop("checked") == true) {
+                var elm1 = document.querySelector(".show1");
+                elm1.querySelector("a").setAttribute("href", "/Admin/Menecer/PenltyAttandance/" + id + "?count="+count);
+                elm1.style.display = "block";
+            }
+            else {
+                var elm1 = document.querySelector(".show1");
+                elm1.style.display = "none";
+            }
+
+        });
+
+    });
+</script>

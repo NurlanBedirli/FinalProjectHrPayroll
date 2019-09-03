@@ -50,5 +50,15 @@ namespace HrPayroll.Areas.Admin.Models
         public List<Education> Educations { get; set; }
 
         public List<OldWorkPlace> OldWorkPlaces { get; set; }
+
+        public List<Penalty> Penalties { get; set; }
+
+        public List<AbsentCount> AbsentCounts { get; set; }
+
+        public List<SignInOutReasonTbl> SignInOutReasonTbls { get; set; }
+
+        public List<WorkEndDate> WorkEndDates { get; set; }
+
+        public List<WorkPlace> WorkPlaces { get; set; }
     }
 }

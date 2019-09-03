@@ -31,7 +31,7 @@ namespace HrPayroll
         {
             services.AddSingleton<IFileNameGenerator, DateTimeFileGenerator>();
 
-                     
+            services.AddAuthorization();
 
             services.AddDbContext<PayrollDbContext>(x =>
             {
@@ -42,6 +42,8 @@ namespace HrPayroll
                 .AddDefaultTokenProviders()
                  .AddEntityFrameworkStores<PayrollDbContext>();
 
+           
+            
 
             services.Configure<CookiePolicyOptions>(options =>
             {
@@ -55,7 +57,9 @@ namespace HrPayroll
             services.AddAuthentication();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            
 
+            services.AddHttpContextAccessor();
             services.AddDistributedMemoryCache();
             services.AddSession();
            
@@ -89,6 +93,7 @@ namespace HrPayroll
                   template: "{area:exists}/{controller=Account}/{action=About}/{id?}"
                 );
             });
+            
 
             app.UseMvc(routes =>
             {

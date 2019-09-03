@@ -2,13 +2,16 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using HrPayroll.Areas.Admin.AttandanceModel;
 using HrPayroll.Areas.Admin.Models;
 using HrPayroll.Areas.Admin.PaginationModel;
+using HrPayroll.Areas.Admin.MenecerAttandanceModel;
 using HrPayroll.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using HrPayroll.Areas.Admin.AttendanceBool;
+using Microsoft.AspNetCore.Authorization;
+using HrPayroll.Areas.Admin.BLL;
 
 namespace HrPayroll.Areas.Admin.Controllers
 {
@@ -69,18 +72,144 @@ namespace HrPayroll.Areas.Admin.Controllers
         }
 
 
-        public async Task<ActionResult> WorkAttendance()
+        [HttpGet]
+        public async Task<ActionResult> WorkAttendance(int? id)
         {
-            await Task.Delay(0);
+            if(id != null)
+            {
+                var current = await dbContext.Employees.Where(x => x.Id == id).FirstOrDefaultAsync();
+                if(current != null)
+                {
+                    HttpContext.Session.SetObjectAsJson("Employ", current);
+                    return View();
+                }
+            }
+            return RedirectToAction("EmployeeList", "Menecer", new { area = "Admin" });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> WorkAttendance(SignInOutReasonTbl model)
+        {
+            if(ModelState.IsValid)
+            {
+                var currentEmp = HttpContext.Session.GetObjectFromJson<Employee>("Employ");
+                SignInOutReasonTbl signIn = new SignInOutReasonTbl
+                {
+                    SignInTime = model.SignInTime,
+                    RaasonName = model.RaasonName,
+                    PenaltyAmount = model.PenaltyAmount,
+                    Status = model.Status,
+                    EmployeeId = currentEmp.Id
+                };
+               await BoolAttendance.BoolSaveSignInOut(dbContext, model, signIn);
+            }
             return View();
         }
 
+        [HttpGet]
         public async Task<ActionResult> Attandance()
         {
-            await Task.Delay(0);
-            return View();
+              List<List<EmployeeAttendance>> attendances = new List<List<EmployeeAttendance>>();
+            List<EmployeeAttendance> No_note_attendance = new List<EmployeeAttendance>();
+
+            var menecer =  HttpContext.Session.GetObjectFromJson<SessionUserModel>("UserData");
+            var MenecerEmporium = await dbContext.EmporiumAppUsers.Where(x => x.AppUserId == menecer.Id).FirstOrDefaultAsync();
+            var Empworkplace = await dbContext.Placeswork.Where(x => x.EmporiumId == MenecerEmporium.EmporiumId).ToListAsync();
+            foreach(var item in Empworkplace)
+            {
+               var currentEmployee = await dbContext.Employees.Where(x => x.Id == item.EmployeeId).FirstOrDefaultAsync();
+                if(currentEmployee != null)
+                {
+                    var a = dbContext.SignInOutReasons.Where(x => x.EmployeeId == item.EmployeeId).Select(z => new EmployeeAttendance
+                    {
+                        SignIn = z.SignIn,
+                        AttandanceDate = z.SignInTime,
+                        Name = currentEmployee.Name,
+                        Surname = currentEmployee.Surname,
+                        EmployeeId = z.EmployeeId
+                    }).ToList();
+                    if(a.Count != 0)
+                    {
+                        attendances.Add(a);
+                    }
+                    else
+                    {
+                        EmployeeAttendance employeeAttendance = new EmployeeAttendance
+                        {
+                            Name = currentEmployee.Name,
+                            Surname = currentEmployee.Surname
+                        };
+                        No_note_attendance.Add(employeeAttendance);
+                    }
+                    
+                }
+               
+            }
+            var AbsentCount = await dbContext.AbsentCounts.ToListAsync();
+            AttandanceTable attandanceTable = new AttandanceTable
+            {
+                attendances = attendances,
+                employeeAttendances = No_note_attendance,
+                AbsentCount = AbsentCount
+            };
+            return View(attandanceTable);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> PenltyAttandance(int? id,int? count)
+        {
+             if(id != null)
+            {
+               var discipline =  await dbContext.DisciplinePenalties.FirstOrDefaultAsync();
+                if(discipline != null)
+                {
+                    if(PenaltyCalculate.CountIsBigNumber((int)count, discipline.Name))
+                    {
+                        var emp = await dbContext.Employees.Where(x => x.Id == id).FirstOrDefaultAsync();
+                        if (emp != null)
+                        {
+                            HttpContext.Session.SetObjectAsJson("Employ", emp);
+                            HttpContext.Session.SetObjectAsJson("AbsentCount", count);
+                            return View();
+                        }
+                        return RedirectToAction("Attandance", "Menecer", new { area = "Admin" });
+                    }
+                     ModelState.AddModelError("aa", "Please follow the discipline");
+                    
+                }
+                ModelState.AddModelError("", "Report the problem to the holding");
+            }
+            return RedirectToAction("Attandance", "Menecer", new { area = "Admin" });
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> PenltyAttandance(AbsentCount absent)
+        {
+            if(ModelState.IsValid)
+            {
+                var empdata = HttpContext.Session.GetObjectFromJson<Employee>("Employ");
+                var count = HttpContext.Session.GetObjectFromJson<int>("AbsentCount");
+                var absentCount = await dbContext.AbsentCounts.Where(x => x.EmployeeId == empdata.Id).FirstOrDefaultAsync();
+                if(absentCount != null)
+                {
+                    dbContext.AbsentCounts.Remove(absentCount);
+                    AbsentCount countAbsent = new AbsentCount
+                    {
+                        Count = count,
+                        DateTime = absent.DateTime
+                    };
+                    dbContext.AbsentCounts.Remove(absentCount);
+                    dbContext.AbsentCounts.Add(countAbsent);
+                    await dbContext.SaveChangesAsync();
+                    await PenaltyCalculate.EmployeePenaltySum(dbContext, count, empdata.Id);
+                }
+                else
+                {
+                   await PenaltyCalculate.EmployeePenaltySum(dbContext, count, empdata.Id);
+                }
+            }
+            return View();
+        }
 
         [HttpPost]
         public async Task<JsonResult> PagingMenecmentAjax(string count, int elmPage)

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using HrPayroll.Models;
 using Microsoft.AspNetCore.Identity;
@@ -62,6 +63,9 @@ namespace HrPayroll.Core.SeedRun
                         await currentUser.AddToRoleAsync(AdminUser, "Admin");
                         await currentUser.AddToRoleAsync(HrUser, "Hr");
                         await currentUser.AddToRoleAsync(menecer, "Menecer");
+                    await currentUser.AddClaimAsync(AdminUser, claim: new Claim(ClaimTypes.Role.ToString(), "Admin"));
+                    await currentUser.AddClaimAsync(HrUser, claim: new Claim(ClaimTypes.Role.ToString(), "Hr"));
+                    await currentUser.AddClaimAsync(menecer, claim: new Claim(ClaimTypes.Role.ToString(), "Menecer"));
                 }
             }
         }

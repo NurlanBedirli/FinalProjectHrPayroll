@@ -1,0 +1,74 @@
+﻿@{
+    ViewData["Title"] = "PenltyAttandance";
+}
+
+@using HrPayroll.Areas.Admin.Models
+@model AbsentCount
+<div class="page-wrapper">
+    <!-- content -->
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase"></h5>
+                </div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card">
+                        <div class="page-title">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                    @if (Context.Session.GetObjectFromJson<Employee>("Employ") != null)
+                                    {
+                                        var data = Context.Session.GetObjectFromJson<Employee>("Employ");
+                                        <div class="page-title"><a style="color:chocolate; cursor:pointer;">@data.Name  @data.Surname</a> Penalty Amount </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form class="row" method="post">
+                                        <div asp-validation-summary="ModelOnly"></div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group custom-mt-form-group">
+                                                <input type="date" name="DateTime" asp-for="DateTime" />
+                                                <label class="control-label" asp-for="DateTime">Date</label><i class="bar"></i>
+                                                <span asp-validation-for="DateTime"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group custom-mt-form-group">
+                                                @if (Context.Session.GetObjectFromJson<int>("AbsentCount") != 0)
+                                                {
+                                                    var count = Context.Session.GetObjectFromJson<int>("AbsentCount");
+                                                    <input asp-for="Count" type="text" value="@count">
+                                                }
+                                                <label class="control-label" asp-for="Count">Attendance Count</label><i class="bar"></i>
+                                                <span asp-validation-for="Count"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <div class="form-group text-center custom-mt-form-group">
+                                                <button class="btn btn-primary mr-2" type="submit">Save</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+

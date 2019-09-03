@@ -8,6 +8,7 @@ using HrPayroll.Areas.Admin.Models;
 using HrPayroll.Areas.Admin.Options;
 using HrPayroll.Areas.Admin.PaginationModel;
 using HrPayroll.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

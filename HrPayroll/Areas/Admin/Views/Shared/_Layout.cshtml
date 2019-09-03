@@ -131,10 +131,12 @@
                         }
                     </a>
                     <div class="dropdown-menu">
-                        @*@if (User.IsInRole("Admin"))*@
                         <a class="dropdown-item" asp-controller="Account" asp-action="Profil" asp-area="Admin">My Profile</a>
                         <a class="dropdown-item" asp-controller="Account" asp-action="Edit" asp-area="Admin">Edit Profile</a>
-                        <a class="dropdown-item" href="settings.html">Settings</a>
+                        @if (User.IsInRole("Menecer"))
+                        {
+                            <a class="dropdown-item" href="settings.html">Settings</a>
+                        }
                         <a class="dropdown-item" asp-controller="Account" asp-action="LogOut">Logout</a>
                     </div>
                 </li>
@@ -165,15 +167,15 @@
                                 <li><a asp-controller="Employee" asp-action="AllEmployee" asp-area="Admin">All Employee</a></li>
                                 <li><a asp-controller="Employee" asp-action="AddEmployee" asp-area="Admin">Add Employee</a></li>
                                 <li><a asp-controller="Employee" asp-action="EmployeeList" asp-area="Admin">List Employee</a></li>
+                                <li><a asp-controller="Menecer" asp-action="EmployeeList" asp-area="Admin">Emporia Employee</a></li>
+                                <li><a asp-controller="Menecer" asp-action="Attandance" asp-area="Admin">Menecer List</a></li>
                             </ul>
                         </li>
                         <li class="submenu">
                             <a href="#"><i class="fa fa-user" aria-hidden="true"></i> <span>Recruitment</span> <span class="menu-arrow"></span></a>
                             <ul class="list-unstyled" style="display: none;">
-                                <li><a asp-controller="Reciurment" asp-action="EmployeeAll" asp-area="Admin">List Employee</a></li>
+                                <li><a asp-controller="Reciurment" asp-action="EmployeeAll" asp-area="Admin">Reciurment Employee</a></li>
                                 <li><a asp-controller="Reciurment" asp-action="AllWorkPlaceEmployee" asp-area="Admin">Work Employee</a></li>
-                                <li><a asp-controller="Menecer" asp-action="EmployeeList" asp-area="Admin">Menecer List</a></li>
-                                <li><a asp-controller="Menecer" asp-action="Attandance" asp-area="Admin">Menecer List</a></li>
                             </ul>
                         </li>
                         <li class="submenu">

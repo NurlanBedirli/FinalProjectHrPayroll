@@ -1,6 +1,6 @@
-﻿using HrPayroll.Areas.Admin.AttandanceModel;
-using HrPayroll.Areas.Admin.EmployeeModel;
+﻿using HrPayroll.Areas.Admin.EmployeeModel;
 using HrPayroll.Areas.Admin.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -12,8 +12,14 @@ namespace HrPayroll.Models
 {
     public class PayrollDbContext : IdentityDbContext<AppUser>
     {
-        public PayrollDbContext(DbContextOptions<PayrollDbContext> options) : base(options) { }
+        private readonly IHttpContextAccessor httpContext;
 
+        public PayrollDbContext(DbContextOptions<PayrollDbContext> options, IHttpContextAccessor _httpContext) : base(options)
+        {
+            httpContext = _httpContext;
+        }
+
+        //Database Model Table
         public DbSet<Education> Educations { get; set; }
         public DbSet<Gender> Genders { get; set; }
         public DbSet<MaritalStatus> MaritalStatuses { get; set; }
@@ -29,10 +35,51 @@ namespace HrPayroll.Models
         public DbSet<EmporiumPosition> EmporiumPositions { get; set; }
         public DbSet<WorkPlace> Placeswork { get; set; }
         public DbSet<WorkEndDate> WorkEnds { get;set; }
-        public DbSet<EmployeeNotWorkReason> NotWorkReasons { get; set; }
-        public DbSet<EmployeeNotWorkReasonStatus> WorkReasonStatuses { get; set; }
         public DbSet<EmporiumAppUserMenecer> EmporiumAppUsers { get; set; }
-        public DbSet<EmployeeAttandance> EmployeeAttandances { get; set; }
-        public DbSet<SignInTbl> SignInTbls { get; set; }
+        public DbSet<SignInOutReasonTbl> SignInOutReasons { get; set; }
+        public DbSet<Penalty> Penalties { get; set; }
+        public DbSet<AbsentCount> AbsentCounts { get; set; }
+        public DbSet<DisciplinePenalty> DisciplinePenalties { get; set; }
+
+        //Fluent API
+        protected override void OnModelCreating(ModelBuilder builder)
+        {
+            builder.Entity<Education>()
+                  .HasOne(x => x.Employee)
+                    .WithMany(y => y.Educations)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<OldWorkPlace>()
+                  .HasOne(x => x.Employee)
+                    .WithMany(y => y.OldWorkPlaces)
+                      .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<AbsentCount>()
+                 .HasOne(x => x.Employee)
+                   .WithMany(y => y.AbsentCounts)
+                     .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Penalty>()
+                 .HasOne(x => x.Employee)
+                   .WithMany(y => y.Penalties)
+                     .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<SignInOutReasonTbl>()
+                .HasOne(x => x.Employee)
+                  .WithMany(y => y.SignInOutReasonTbls)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<WorkEndDate>()
+                .HasOne(x => x.Employee)
+                  .WithMany(y => y.WorkEndDates)
+                    .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<WorkPlace>()
+             .HasOne(x => x.Employee)
+               .WithMany(y => y.WorkPlaces)
+                 .OnDelete(DeleteBehavior.Cascade);
+
+            base.OnModelCreating(builder);
+        }
     }
 }

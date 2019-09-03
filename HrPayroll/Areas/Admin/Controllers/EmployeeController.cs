@@ -8,6 +8,7 @@ using HrPayroll.Areas.Admin.Models;
 using HrPayroll.Areas.Admin.PaginationModel;
 using HrPayroll.Core;
 using HrPayroll.Models;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -31,9 +32,10 @@ namespace HrPayroll.Areas.Admin.Controllers
             nameGenerator = _nameGenerator;
         }
 
-
+        
         public IActionResult Index()
         {
+         
             return View();
         }
 

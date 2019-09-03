@@ -4,14 +4,16 @@ using HrPayroll.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HrPayroll.Migrations
 {
     [DbContext(typeof(PayrollDbContext))]
-    partial class PayrollDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190902135933_absentCounta")]
+    partial class absentCounta
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,21 +158,6 @@ namespace HrPayroll.Migrations
                     b.HasIndex("HoldingId");
 
                     b.ToTable("Departaments");
-                });
-
-            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.DisciplinePenalty", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("Name");
-
-                    b.Property<int>("PenaltyValue");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("DisciplinePenalties");
                 });
 
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.Employee", b =>
@@ -617,22 +604,20 @@ namespace HrPayroll.Migrations
                 {
                     b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
                         .WithMany("Educations")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("EmployeeId");
                 });
 
             modelBuilder.Entity("HrPayroll.Areas.Admin.EmployeeModel.OldWorkPlace", b =>
                 {
                     b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
                         .WithMany("OldWorkPlaces")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
+                        .HasForeignKey("EmployeeId");
                 });
 
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.AbsentCount", b =>
                 {
                     b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
-                        .WithMany("AbsentCounts")
+                        .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -697,7 +682,7 @@ namespace HrPayroll.Migrations
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.Penalty", b =>
                 {
                     b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
-                        .WithMany("Penalties")
+                        .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -718,7 +703,7 @@ namespace HrPayroll.Migrations
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.SignInOutReasonTbl", b =>
                 {
                     b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
-                        .WithMany("SignInOutReasonTbls")
+                        .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -726,7 +711,7 @@ namespace HrPayroll.Migrations
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.WorkEndDate", b =>
                 {
                     b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
-                        .WithMany("WorkEndDates")
+                        .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -734,7 +719,7 @@ namespace HrPayroll.Migrations
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.WorkPlace", b =>
                 {
                     b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
-                        .WithMany("WorkPlaces")
+                        .WithMany()
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
 

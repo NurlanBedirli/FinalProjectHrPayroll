@@ -1,16 +1,17 @@
-﻿using HrPayroll.Areas.Admin.Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace HrPayroll.Areas.Admin.AttandanceModel
+namespace HrPayroll.Areas.Admin.Models
 {
-    public class AttendanceTable
+    public class AbsentCount
     {
         public int Id { get; set; }
-        public List<SignInTbl> signInlist { get; set; }
-        public List<SignInTbl> signOutlist { get; set; }
+        [Required]
+        public int Count { get; set; }
+        [Required]
         public DateTime DateTime { get; set; }
         public Employee Employee { get; set; }
         public int EmployeeId { get; set; }
