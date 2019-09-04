@@ -237,8 +237,7 @@ namespace HrPayroll.Areas.Admin.Controllers
                     return View(aboutEmployeeInformation1);
                 }
                
-                HttpContext.Session.SetObjectAsJson("Employ", employee);
-                return View(employee);
+                return RedirectToAction(nameof(AllEmployee));
             }
             return RedirectToAction(nameof(AllEmployee));
         }

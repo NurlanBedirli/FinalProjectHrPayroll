@@ -12,11 +12,8 @@ namespace HrPayroll.Models
 {
     public class PayrollDbContext : IdentityDbContext<AppUser>
     {
-        private readonly IHttpContextAccessor httpContext;
-
-        public PayrollDbContext(DbContextOptions<PayrollDbContext> options, IHttpContextAccessor _httpContext) : base(options)
+        public PayrollDbContext(DbContextOptions<PayrollDbContext> options) : base(options)
         {
-            httpContext = _httpContext;
         }
 
         //Database Model Table
@@ -40,6 +37,7 @@ namespace HrPayroll.Models
         public DbSet<Penalty> Penalties { get; set; }
         public DbSet<AbsentCount> AbsentCounts { get; set; }
         public DbSet<DisciplinePenalty> DisciplinePenalties { get; set; }
+        public DbSet<Dismissed> Dismisseds { get; set; }
 
         //Fluent API
         protected override void OnModelCreating(ModelBuilder builder)

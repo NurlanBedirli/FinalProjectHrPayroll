@@ -363,6 +363,60 @@
     });
 
     //DataBase Craete Next Prev Pagination 
+    //$("#paging").on("click", "li #next", function () {
+    //    var pageCount = $(this).attr('name');
+    //    var page = parseFloat(pagecount.value);
+    //    $.ajax({
+    //        url: "/Admin/Menecer/PagingMenecmentAjax/",
+    //        type: "post",
+    //        dataType: "JSON",
+    //        data: {
+    //            count: pageCount,
+    //            elmPage: page
+    //        },
+    //        success: function (response) {
+    //            if (response.message == 202) {
+    //                $("tbody tr").remove();
+    //                for (var i = 0; i < response.currentData.length; i++) {
+    //                    SearcFindItemTableWorkPlace(response.currentData[i]);
+    //                }
+    //                if (response.nextElement) {
+    //                    $("#PageNext a").remove();
+    //                    var a = document.createElement('a');
+    //                    a.setAttribute("class", "page-link btn-danger");
+    //                    a.style.borderRadius = "35px";
+    //                    a.id = "next";
+    //                    a.style.cursor = "pointer";
+    //                    a.style.marginLeft = "5px";
+    //                    a.setAttribute("name", `${response.currentPage + 1}`);
+    //                    a.innerText = "Next";
+    //                    $("#PageNext").append(a);
+    //                    if (response.currentPage >= 1) {
+    //                        $("#PagePrev a").remove();
+    //                    }
+    //                }
+    //                if (response.prevElement) {
+    //                    $("#PagePrev a").remove();
+    //                    var a = document.createElement('a');
+    //                    a.setAttribute("class", "page-link btn-danger");
+    //                    a.style.borderRadius = "35px";
+    //                    a.id = "next";
+    //                    a.style.cursor = "pointer";
+    //                    a.style.marginLeft = "5px";
+    //                    a.setAttribute("name", `${response.currentPage - 1}`);
+    //                    a.innerText = "Prev";
+    //                    $("#PagePrev").append(a);
+    //                    if (response.currentPage == response.pageCount) {
+    //                        $("#PageNext a").remove();
+    //                    }
+    //                }
+    //            }
+    //        }
+    //    });
+    //});
+
+
+    //DataBase Craete Next Prev Pagination 
     $("#paging").on("click", "li #next", function () {
         var pageCount = $(this).attr('name');
         var page = parseFloat(pagecount.value);
@@ -378,7 +432,24 @@
                 if (response.message == 202) {
                     $("tbody tr").remove();
                     for (var i = 0; i < response.currentData.length; i++) {
-                        SearcFindItemTableWorkPlace(response.currentData[i]);
+                        var tr = document.createElement('tr');
+                        var td = document.createElement('td');
+                        var a = document.createElement('img');
+                        a.setAttribute("style", "width:40px; border-radius:100px ");
+                        a.src = `/img/${response.currentData[i].photo}`;
+                        var _a = document.createElement('a');
+                        var h2 = document.createElement('h2');
+                        h2.setAttribute("style", "margin-right:5px");
+                        var _h2 = document.createElement('h2');
+                        _a.innerText = `  ${response.currentData[i].name} ${response.currentData[i].surname}`;
+                        _a.style.color = "cyan";
+                        h2.append(a);
+                        td.append(h2);
+                        _h2.append(_a);
+                        td.append(_h2);
+                        tr.append(td);
+                        CreateTd(response.currentData[i], tr);
+                        document.querySelector("table tbody").append(tr);
                     }
                     if (response.nextElement) {
                         $("#PageNext a").remove();
@@ -416,6 +487,8 @@
     });
 
 
+
+
     $("#tbody").on("click", "tbody tr td div #btnCheck ", function () {
         var id = $(this).val();
 
@@ -429,5 +502,6 @@
             elm1.style.display = "none";
         }
     });
+
 
 });

@@ -73,7 +73,7 @@ namespace HrPayroll.Controllers
                                 Role =str[0]
                             };
                             HttpContext.Session.SetObjectAsJson("UserData", sessionUser);
-                            await signInManager.SignInAsync(user,false);
+                            await signInManager.SignInAsync(user,true);
                             return RedirectToAction("Index", "Employee",new { area= "Admin"});
                     }
                     else

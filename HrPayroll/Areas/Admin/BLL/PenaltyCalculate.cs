@@ -21,9 +21,21 @@ namespace HrPayroll.Areas.Admin.BLL
                     var WillBeFined = await payrollDb.DisciplinePenalties.FirstOrDefaultAsync();//olunacaq cerime
                     if(WillBeFined != null)
                     {
-                        if(!CountIsBigNumber((int)count,WillBeFined.Name))
+                        if(CountIsBigNumberMax((int)count,WillBeFined.MaxDay))
                         {
                           var employee =  await payrollDb.Employees.Where(x => x.Id == employeeId).FirstOrDefaultAsync();
+                            Dismissed dismissed = new Dismissed()
+                            {
+                                Name = employee.Name,
+                                Surname = employee.Surname,
+                                Number = employee.Number,
+                                Photo = employee.Photo,
+                                Email = employee.Email,
+                                DistrictRegistration = employee.DistrictRegistration,
+                                IDCardSerialNumber = employee.IDCardSerialNumber,
+                                PlasiyerCode = employee.PlasiyerCode
+                            };//isden cixanlar
+                            payrollDb.Dismisseds.Add(dismissed);
                             payrollDb.Employees.Remove(employee);
                             await payrollDb.SaveChangesAsync();
                         }
@@ -54,37 +66,34 @@ namespace HrPayroll.Areas.Admin.BLL
         }
 
 
-
-
-
-         public static bool CountIsBigNumber(int count,string value)
+         public static bool CountIsBigNumberMax(int count,int max)
         {
             bool Iscount = false;
-            List<int> vs = new List<int>();
-            foreach (char c in value)
+
+            if (max <= count)
             {
-                if (Char.IsNumber(c))
-                {
-                    var number = Convert.ToInt32(c.ToString());
-                    vs.Add(number);
-                }
+                Iscount = true;
             }
-            foreach(var figure in vs)
+            if (max > count)
             {
-                if(figure < count)
-                {
-                    Iscount = true;
-                    break;
-                }
-                if(figure > count)
-                {
-                    Iscount = false;
-                    break;
-                }
+               Iscount = false;
             }
 
             return Iscount;
         }
+
+        public static bool CountIsBigNumberMin(int count, int min)
+        {
+            bool Iscount = false;
+
+            if (min <= count)
+            {
+                Iscount = true;
+            }
+            return Iscount;
+        }
+
+
     }
 
 }

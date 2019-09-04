@@ -41,8 +41,6 @@ namespace HrPayroll
             services.AddIdentity<AppUser, IdentityRole>()
                 .AddDefaultTokenProviders()
                  .AddEntityFrameworkStores<PayrollDbContext>();
-
-           
             
 
             services.Configure<CookiePolicyOptions>(options =>
@@ -54,12 +52,12 @@ namespace HrPayroll
             //DropDrown Select Option configuration
             services.Configure<WorkIdOptions>(options => Configuration.Bind(options));
 
+
             services.AddAuthentication();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
             
 
-            services.AddHttpContextAccessor();
             services.AddDistributedMemoryCache();
             services.AddSession();
            

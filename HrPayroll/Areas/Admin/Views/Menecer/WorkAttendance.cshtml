@@ -17,7 +17,7 @@
                                     @if (Context.Session.GetObjectFromJson<Employee>("Employ") != null)
                                     {
                                         var data = Context.Session.GetObjectFromJson<Employee>("Employ");
-                                        <div class="Page-title"><a href="Admin/Employee/AboutEmployee/@data.Id">@data.Name @data.Surname</a> Employee Attandance</div>
+                                        <div class="Page-title"><a href="/Admin/Employee/AboutEmployee/?page=@data.Id">@data.Name @data.Surname</a> Employee Attandance</div>
                                     }
                                 </div>
                             </div>

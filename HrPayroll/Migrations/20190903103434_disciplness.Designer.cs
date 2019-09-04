@@ -4,14 +4,16 @@ using HrPayroll.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HrPayroll.Migrations
 {
     [DbContext(typeof(PayrollDbContext))]
-    partial class PayrollDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190903103434_disciplness")]
+    partial class disciplness
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -173,33 +175,6 @@ namespace HrPayroll.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("DisciplinePenalties");
-                });
-
-            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.Dismissed", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("DistrictRegistration");
-
-                    b.Property<string>("Email");
-
-                    b.Property<string>("IDCardSerialNumber");
-
-                    b.Property<string>("Name");
-
-                    b.Property<string>("Number");
-
-                    b.Property<string>("Photo");
-
-                    b.Property<string>("PlasiyerCode");
-
-                    b.Property<string>("Surname");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Dismisseds");
                 });
 
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.Employee", b =>

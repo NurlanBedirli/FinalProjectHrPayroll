@@ -2081,6 +2081,13 @@ blockquote p {font-style: italic;font-weight: 400;}
 .table-attandance tr th {
     font-size: 12px !important;
 }
-
+.pageSize li {
+    font-size: 20px !important;
+    text-align: center;
+}
+.pageSize {
+    min-width: 7rem !important;
+    border-radius: 26px;
+}
 
 

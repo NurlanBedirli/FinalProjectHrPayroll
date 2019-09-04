@@ -1,0 +1,161 @@
+﻿
+@{
+    ViewData["Title"] = "MenecerEmployeeList";
+}
+
+@using HrPayroll.Areas.Admin.PaginationModel
+@model PagingModel
+<div class="page-wrapper">
+    <!-- content -->
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase">Employee list</h5>
+                </div>
+            </div>
+        </div>
+        <div class="content-page">
+            <div class="row filter-row">
+                <div class="col-sm-6 col-md-4">
+                    <div class="form-group custom-mt-form-group">
+                        <input type="text" id="name" />
+                        <label class="control-label"> Name</label><i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="form-group custom-mt-form-group">
+                        <input type="text" id="surname" />
+                        <label class="control-label">Surname</label><i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-sm-6 col-md-4">
+                    <div class="form-group custom-mt-form-group">
+                        <input type="text" id="pscode" />
+                        <label class="control-label">Plasiyer Code</label><i class="bar"></i>
+                    </div>
+                </div>
+                <div class="col-md-2 col-sm-2">
+                    <div class="form-group custom-mt-form-group" style="border: 1px solid;margin-top:0px !important;padding:0px !important;border-radius: 14px;color: aqua;">
+                        <form method="get" id="formm">
+                            <ul class="nav nav-pills" >
+                                <li class="dropdown" style="margin: auto !important;">
+                                    <a class="dropdown-toggle"
+                                       data-toggle="dropdown"
+                                       href="#">
+                                        Page Size
+                                        <b class="caret"></b>
+                                    </a>
+                                    <ul class="dropdown-menu" id="pageSize">
+                                        <li><a asp-controller="Menecer" asp-area="Admin" asp-action="MenecerEmployeeList" asp-route-pageSize="5">5</a></li>
+                                        <li><a asp-controller="Menecer" asp-area="Admin" asp-action="MenecerEmployeeList" asp-route-pageSize="10">10</a></li>
+                                        <li><a asp-controller="Menecer" asp-area="Admin" asp-action="MenecerEmployeeList" asp-route-pageSize="20">20</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="margin-bottom:20px;">
+                <div class="col-md-3 showw1" id="addemp" style="display:none">
+                    <a class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i>Work Attandance</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table table-striped custom-table datatable" id="tbody">
+                            <thead>
+                                <tr>
+                                    <th style="min-width:70px;">Name and Surname</th>
+                                    <th style="min-width:50px;">Plasiyer Code</th>
+                                    <th style="min-width:100px;">Phone Number</th>
+                                    <th style="min-width:50px;">Nationally</th>
+                                    <th style="min-width:50px;">Email</th>
+                                    <th style="min-width:50px;">BirthDay</th>
+                                    <th class="text-right">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var elm in Model.Employees)
+                                {
+                                    <tr>
+                                        <td>
+                                            <h2 style="margin-right:5px"><img src="~/img/@elm.Photo" style="width:45px; border-radius:100px" /></h2>
+                                            <h2><a style="color: cyan;" asp-controller="Employee" asp-area="Admin" asp-action="AboutEmployee" asp-route-page="@elm.Id">@elm.Name @elm.Surname</a></h2>
+                                        </td>
+                                        <td>@elm.PlasiyerCode</td>
+                                        <td>@elm.Number</td>
+                                        <td>@elm.Nationally</td>
+                                        <td>@elm.Email</td>
+                                        <td>@elm.BirthDay.ToString("MM.MM.yyyy")</td>
+                                        <td class="text-right">
+                                            <div class="form-check">
+                                                <input type="checkbox" class="form-check-input" value="@elm.Id" id="Workattadence">
+                                                <label class="form-check-label"></label>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12 col-md-5" style="margin-top:20px;">
+                <div class="col-sm-12 col-md-7">
+                    <div class="dataTables_paginate paging_simple_numbers" id="DataTables_Table_0_paginate  aaaa">
+                        <ul class="pagination" id="paging">
+
+                            <li class="paginate_button page-item next"  >
+                                @if (Model.Paging.Prev)
+                                {
+                                    <a  asp-controller="Menecer" asp-action="MenecerEmployeeList" asp-area="Admin" asp-route-id="@(Model.Paging.CurrentPage - 1)" style="margin-left: 5px; cursor: pointer; border-radius:35px;" class="page-link btn-danger">Prev</a>
+                                }
+                            </li>
+                            @for (int i = 1; i <= Model.Paging.PageCount; i++)
+                            {
+                                <li class="paginate_button page-item next" id="DataTable" onclick="">
+                                    <a  asp-controller="Menecer" asp-action="MenecerEmployeeList" asp-area="Admin" asp-route-id="@i" style="margin-left: 5px; cursor: pointer; border-radius:35px;" class="page-link">@i.ToString()</a>
+                                </li>
+                            }
+                            <li class="paginate_button page-item next" >
+                                @if (Model.Paging.Next)
+                                {
+                                    <a  asp-controller="Menecer" asp-action="MenecerEmployeeList" asp-area="Admin" asp-route-id="@(Model.Paging.CurrentPage + 1)" style="margin-left: 5px; cursor: pointer; border-radius:35px;" class="page-link btn-danger">Next</a>
+                                }
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        //$("#pagesizelist").on("change", function (event) {
+        //    var pageSize = (this).value;
+        //    var form = document.getElementById("formm");
+        //    form.setAttribute("href", "Admin/Menecer/MenecerEmployeeList/" + pageSize);
+        //     form.submit();
+        //});
+
+
+        $("#tbody").on("click", "tbody tr td div #Workattadence ", function () {
+            var id = $(this).val();
+            if ($(this).prop("checked") == true) {
+                var elm1 = document.querySelector(".showw1");
+                elm1.querySelector("a").setAttribute("href", "/Admin/Menecer/WorkAttendance/" + id);
+                elm1.style.display = "block";
+            }
+            else {
+                var elm1 = document.querySelector(".showw1");
+                elm1.style.display = "none";
+            }
+        });
+    });
+</script>

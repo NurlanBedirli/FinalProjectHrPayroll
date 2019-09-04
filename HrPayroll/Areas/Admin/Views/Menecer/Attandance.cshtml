@@ -80,7 +80,7 @@
                                     {
                                         <th>@i</th>
                                     }
-                                        <th><input value="2-5Day" style="width: 41px;" /></th>
+                                        <th><input value="@Model.DisciplinePenalty.MinDay-@Model.DisciplinePenalty.MaxDay Day" style="width: 41px;" /></th>
                                         <th class="action-attandance" style="font-size: 9px !important; padding: 3px">Action</th>
                                 </tr>
                             </thead>
@@ -94,14 +94,22 @@
                                 <tr>
                                     <td>@name @surname</td>
                                     @for (int i = 1; i <= dateDay; i++)
+                                    {
+                                        var data = emp.Where(x => x.AttandanceDate.Day == i).FirstOrDefault();
+                                        if (data != null)
+                                        {
+                                            if (data.SignIn == true)
                                             {
-                                                var data = emp.Where(x => x.AttandanceDate.Day == i).FirstOrDefault();
-                                                if (data != null)
+                                                if (Model.DisciplinePenalty.MinDay <= count)
                                                 {
-                                                    if (data.SignIn == true)
-                                                    {
-                                                        count = 0;
-                                                <td><i class="fa fa-check text-success"></i></td>
+                                                    <td><i class="fa fa-check text-success"></i></td>
+                                                }
+                                                else
+                                                {
+                                                    count = 0;
+                                                    <td><i class="fa fa-check text-success"></i></td>
+                                                }
+
                                             }
                                             else
                                             {
@@ -110,12 +118,18 @@
                                                 {
                                                     if (absent.DateTime.Day < i)
                                                     {
-                                                        count++;
-                                                        <td><i class="fa fa-close text-danger"></i></td>
+                                                        if (Model.DisciplinePenalty.MinDay <= count)
+                                                        {
+                                                            <td><i class="fa fa-close text-danger"></i></td>
+                                                        }
+                                                        else
+                                                        {
+                                                            count++;
+                                                            <td><i class="fa fa-close text-danger"></i></td>
+                                                        }
                                                     }
                                                     else
                                                     {
-                                                        count++;
                                                         <td><i class="fa fa-close text-danger"></i></td>
                                                     }
                                                 }
