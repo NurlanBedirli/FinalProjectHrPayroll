@@ -38,6 +38,7 @@ namespace HrPayroll.Models
         public DbSet<AbsentCount> AbsentCounts { get; set; }
         public DbSet<DisciplinePenalty> DisciplinePenalties { get; set; }
         public DbSet<Dismissed> Dismisseds { get; set; }
+        public DbSet<Bonus> Bonus { get; set; }
 
         //Fluent API
         protected override void OnModelCreating(ModelBuilder builder)
@@ -76,6 +77,11 @@ namespace HrPayroll.Models
              .HasOne(x => x.Employee)
                .WithMany(y => y.WorkPlaces)
                  .OnDelete(DeleteBehavior.Cascade);
+
+            builder.Entity<Bonus>()
+                  .HasOne(x => x.Employee)
+                   .WithMany(y => y.Bonus)
+                    .OnDelete(DeleteBehavior.Cascade);
 
             base.OnModelCreating(builder);
         }

@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using HrPayroll.Areas.Admin.AddHolEmPosDepModel;
 using HrPayroll.Areas.Admin.Models;
 using HrPayroll.Areas.Admin.PaginationModel;
 using HrPayroll.Core;
@@ -12,6 +14,8 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace HrPayroll.Areas.Admin.Controllers
 {
@@ -52,6 +56,7 @@ namespace HrPayroll.Areas.Admin.Controllers
             return View();
         }
 
+        // account settings
         [HttpGet]
         public async Task<ActionResult> Edit()
         {
@@ -70,7 +75,6 @@ namespace HrPayroll.Areas.Admin.Controllers
             await Task.Delay(0);
             return View(model);
         }
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<ActionResult> Edit(AdminModel adminModel,IFormFile Image)
@@ -207,7 +211,6 @@ namespace HrPayroll.Areas.Admin.Controllers
             }
             return View(adminModel);
         }
-
         [HttpGet]
         public async Task<ActionResult> Profil()
         {
@@ -226,13 +229,160 @@ namespace HrPayroll.Areas.Admin.Controllers
             };
             return View(admin);
         }
-
         public async Task<ActionResult> LogOut()
         {
            await signInManager.SignOutAsync();
             HttpContext.Session.Clear();
             return RedirectToAction("Login","Account");
         }
+
+        //add holding
+        [HttpGet]
+        public async Task<ActionResult> AddHolding()
+        {
+            await Task.Delay(0);
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> AddHolding(Holding holding)
+        {
+            if(ModelState.IsValid)
+            {
+                    Holding holdin = new Holding
+                    {
+                        Name = holding.Name
+                    };
+                    await payrollDb.Holdings.AddAsync(holdin);
+                    await payrollDb.SaveChangesAsync();
+            }
+            return View();
+        }
+
+        //add company
+        [HttpGet]
+        public async Task<ActionResult> AddCompany()
+        {
+            await Task.Delay(0);
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> AddCompany(Company company)
+        {
+           if(ModelState.IsValid)
+            {
+                var data = await payrollDb.Holdings.Where(x => x.Id == company.HoldingId).FirstOrDefaultAsync();
+                if(data !=null)
+                {
+                    Company companys = new Company
+                    {
+                        Name = company.Name,
+                        HoldingId = data.Id
+                    };
+                    await payrollDb.Companies.AddAsync(companys);
+                    await payrollDb.SaveChangesAsync();
+                    ModelState.AddModelError("", "Success");
+                }
+            }
+            return View();
+            
+        }
+
+        //add emporia
+        [HttpGet]
+        public async Task<ActionResult> AddEmporia()
+        {
+            await Task.Delay(0);
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> AddEmporia(Emporium emporium)
+        {
+            if(ModelState.IsValid)
+            {
+                var data = await payrollDb.Companies.Where(x => x.Id == emporium.CompanyId).FirstOrDefaultAsync();
+                if(data != null)
+                {
+                    Emporium emporiums = new Emporium
+                    {
+                        Name = emporium.Name,
+                        Address = emporium.Address,
+                        CompanyId = data.Id
+                    };
+                    await payrollDb.Emporia.AddAsync(emporiums);
+                    await payrollDb.SaveChangesAsync();
+                }
+                ModelState.AddModelError("", "Check Company Name");
+            }
+            return View();
+        }
+
+        //add position
+        [HttpGet]
+        public async Task<ActionResult> AddPosition()
+        {
+            await Task.Delay(0);
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> AddPosition(Positions positions)
+        {
+            if(ModelState.IsValid)
+            {
+                Positions position = new Positions
+                {
+                    Name = positions.Name
+                };
+                await payrollDb.Positions.AddAsync(position);
+                await payrollDb.SaveChangesAsync();
+            }
+            return View();
+        }
+
+        //add departament
+        [HttpGet]
+        public async Task<ActionResult> AddDepartament()
+        {
+            await Task.Delay(0);
+            return View();
+        }
+        [HttpPost]
+        public async Task<ActionResult> AddDepartament(Departament departament)
+        {
+           if(ModelState.IsValid)
+            {
+                var data = payrollDb.Holdings.Where(x => x.Id == departament.HoldingId).FirstOrDefaultAsync();
+                if(data != null)
+                {
+                    Departament departaments = new Departament
+                    {
+                        Name = departament.Name,
+                        HoldingId = data.Id
+                    };
+                    await payrollDb.Departaments.AddAsync(departaments);
+                    await payrollDb.SaveChangesAsync();
+                    ModelState.AddModelError("", "Success");
+                }
+                ModelState.AddModelError("", "Check holding name");
+            }
+            return View();
+        }
+
+        //Ajax Query
+        [HttpPost]
+        public async  Task<JsonResult> AjaxHolding()
+        {
+            var data = await payrollDb.Holdings.ToListAsync();
+            return Json(new { company = data, message = 202 });
+        }
+        [HttpPost]
+        public async Task<JsonResult> AjaxCompany()
+        {
+            List<Company> data =await payrollDb.Companies.ToListAsync();
+            return Json(new { company = data, message = 202 });
+        }
+
+
+
 
     }
 }

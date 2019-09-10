@@ -4,14 +4,16 @@ using HrPayroll.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HrPayroll.Migrations
 {
     [DbContext(typeof(PayrollDbContext))]
-    partial class PayrollDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190905083747_datetimedismiss")]
+    partial class datetimedismiss
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -120,31 +122,6 @@ namespace HrPayroll.Migrations
                     b.HasIndex("EmployeeId");
 
                     b.ToTable("AbsentCounts");
-                });
-
-            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.Bonus", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<string>("AppUserId");
-
-                    b.Property<DateTime>("BonusDate");
-
-                    b.Property<decimal>("BonusPrize");
-
-                    b.Property<string>("BonusStatus");
-
-                    b.Property<int>("EmployeeId");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("AppUserId");
-
-                    b.HasIndex("EmployeeId");
-
-                    b.ToTable("Bonus");
                 });
 
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.Company", b =>
@@ -689,18 +666,6 @@ namespace HrPayroll.Migrations
                 {
                     b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
                         .WithMany("AbsentCounts")
-                        .HasForeignKey("EmployeeId")
-                        .OnDelete(DeleteBehavior.Cascade);
-                });
-
-            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.Bonus", b =>
-                {
-                    b.HasOne("HrPayroll.Models.AppUser", "AppUser")
-                        .WithMany()
-                        .HasForeignKey("AppUserId");
-
-                    b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
-                        .WithMany("Bonus")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });

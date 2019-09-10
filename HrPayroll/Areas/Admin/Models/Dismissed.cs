@@ -16,5 +16,6 @@ namespace HrPayroll.Areas.Admin.Models
         public string IDCardSerialNumber { get; set; }
         public string PlasiyerCode { get; set; }
         public string Photo { get; set; }
+        public DateTime EndDate { get; set; }
     }
 }

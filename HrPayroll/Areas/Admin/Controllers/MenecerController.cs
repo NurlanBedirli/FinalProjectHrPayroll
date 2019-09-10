@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using HrPayroll.Areas.Admin.BLL;
 using HrPayroll.Areas.Admin.Options;
 using Microsoft.Extensions.Options;
+using HrPayroll.Areas.Admin.EmployeeModel;
 
 namespace HrPayroll.Areas.Admin.Controllers
 {
@@ -121,7 +122,6 @@ namespace HrPayroll.Areas.Admin.Controllers
                         {
                             elmpage = pageElm;
                         }
-                        
                     }
                    else
                     {
@@ -190,50 +190,53 @@ namespace HrPayroll.Areas.Admin.Controllers
             List<EmployeeAttendance> No_note_attendance = new List<EmployeeAttendance>();
 
             var menecer =  HttpContext.Session.GetObjectFromJson<SessionUserModel>("UserData");
-            var MenecerEmporium = await dbContext.EmporiumAppUsers.Where(x => x.AppUserId == menecer.Id).FirstOrDefaultAsync();
-            var Empworkplace = await dbContext.Placeswork.Where(x => x.EmporiumId == MenecerEmporium.EmporiumId).ToListAsync();
-            foreach(var item in Empworkplace)
+            if(menecer != null)
             {
-               var currentEmployee = await dbContext.Employees.Where(x => x.Id == item.EmployeeId).FirstOrDefaultAsync();
-                if(currentEmployee != null)
+                var MenecerEmporium = await dbContext.EmporiumAppUsers.Where(x => x.AppUserId == menecer.Id).FirstOrDefaultAsync();
+                var Empworkplace = await dbContext.Placeswork.Where(x => x.EmporiumId == MenecerEmporium.EmporiumId).ToListAsync();
+                foreach (var item in Empworkplace)
                 {
-                    var a = dbContext.SignInOutReasons.Where(x => x.EmployeeId == item.EmployeeId).Select(z => new EmployeeAttendance
+                    var currentEmployee = await dbContext.Employees.Where(x => x.Id == item.EmployeeId).FirstOrDefaultAsync();
+                    if (currentEmployee != null)
                     {
-                        SignIn = z.SignIn,
-                        AttandanceDate = z.SignInTime,
-                        Name = currentEmployee.Name,
-                        Surname = currentEmployee.Surname,
-                        EmployeeId = z.EmployeeId
-                    }).ToList();
-                    if(a.Count != 0)
-                    {
-                        attendances.Add(a);
-                    }
-                    else
-                    {
-                        EmployeeAttendance employeeAttendance = new EmployeeAttendance
+                        var a = dbContext.SignInOutReasons.Where(x => x.EmployeeId == item.EmployeeId).Select(z => new EmployeeAttendance
                         {
+                            SignIn = z.SignIn,
+                            AttandanceDate = z.SignInTime,
                             Name = currentEmployee.Name,
-                            Surname = currentEmployee.Surname
-                        };
-                        No_note_attendance.Add(employeeAttendance);
-                    }
-                    
-                }
-               
-            }
-            var AbsentCount = await dbContext.AbsentCounts.ToListAsync();
-            var discipline = await dbContext.DisciplinePenalties.FirstOrDefaultAsync();
-            AttandanceTable attandanceTable = new AttandanceTable
-            {
-                attendances = attendances,
-                employeeAttendances = No_note_attendance,
-                AbsentCount = AbsentCount,
-                DisciplinePenalty = discipline
-            };
-            return View(attandanceTable);
-        }
+                            Surname = currentEmployee.Surname,
+                            EmployeeId = z.EmployeeId
+                        }).ToList();
+                        if (a.Count != 0)
+                        {
+                            attendances.Add(a);
+                        }
+                        else
+                        {
+                            EmployeeAttendance employeeAttendance = new EmployeeAttendance
+                            {
+                                Name = currentEmployee.Name,
+                                Surname = currentEmployee.Surname
+                            };
+                            No_note_attendance.Add(employeeAttendance);
+                        }
 
+                    }
+                }
+                var AbsentCount = await dbContext.AbsentCounts.ToListAsync();
+                var discipline = await dbContext.DisciplinePenalties.FirstOrDefaultAsync();
+                AttandanceTable attandanceTable = new AttandanceTable
+                {
+                    attendances = attendances,
+                    employeeAttendances = No_note_attendance,
+                    AbsentCount = AbsentCount,
+                    DisciplinePenalty = discipline
+                };
+                return View(attandanceTable);
+            }
+            return RedirectToAction("Login", "Account");
+           
+        }
 
         [HttpGet]
         public async Task<ActionResult> PenltyAttandance(int? id,int? count)
@@ -282,7 +285,7 @@ namespace HrPayroll.Areas.Admin.Controllers
                     dbContext.AbsentCounts.Remove(absentCount);
                     dbContext.AbsentCounts.Add(countAbsent);
                     await dbContext.SaveChangesAsync();
-                    await PenaltyCalculate.EmployeePenaltySum(dbContext, count, empdata.Id);
+                    await PenaltyCalculate.EmployeePenaltySum(dbContext, count, empdata.Id,absent.DateTime);
                 }
                 else
                 {
@@ -294,11 +297,97 @@ namespace HrPayroll.Areas.Admin.Controllers
                     };
                     dbContext.AbsentCounts.Add(countAbsent);
                     await dbContext.SaveChangesAsync();
-                    await PenaltyCalculate.EmployeePenaltySum(dbContext, count, empdata.Id);
+                    await PenaltyCalculate.EmployeePenaltySum(dbContext, count, empdata.Id,absent.DateTime);
                 }
             }
             return View();
         }
+
+        [HttpGet]
+        public async Task<ActionResult> BonusEmployee(int? id)
+        {
+            if(id != null)
+            {
+                var data = await dbContext.Employees.Where(x => x.Id == id).FirstOrDefaultAsync();
+                if(data != null)
+                {
+                    var bonus = await dbContext.Bonus.Where(c => c.EmployeeId == data.Id).FirstOrDefaultAsync();
+                    if(bonus == null)
+                    {
+                        HttpContext.Session.SetObjectAsJson("Employ", data);
+                        return View();
+                    }
+                }
+            }
+
+            return RedirectToAction("MenecerEmployeeList", "Menecer",new { area = "Admin"});
+        }
+       
+        [HttpPost]
+        public async Task<ActionResult> BonusEmployee(Bonus bonus)
+        {
+            if(ModelState.IsValid)
+            {
+                var menecer = HttpContext.Session.GetObjectFromJson<SessionUserModel>("UserData");
+                var data =  HttpContext.Session.GetObjectFromJson<Employee>("Employ");
+                if(data != null)
+                {
+                    using (var transaction = await dbContext.Database.BeginTransactionAsync())
+                    {
+                        try
+                        {
+                            Bonus bonuses = new Bonus
+                            {
+                                BonusDate = bonus.BonusDate,
+                                BonusPrize = bonus.BonusPrize,
+                                BonusStatus = bonus.BonusStatus,
+                                EmployeeId = data.Id,
+                                AppUserId = menecer.Id
+                            };
+                            await dbContext.Bonus.AddAsync(bonuses);
+                            await dbContext.SaveChangesAsync();
+                            transaction.Commit();
+                            ModelState.AddModelError("", "Success");
+                            return View();
+                        }
+                        catch(Exception ex)
+                        {
+                            ModelState.AddModelError("", ex.Message);
+                        }
+                       
+                    }
+                }
+            }
+            return RedirectToAction("EmployeePositionTable","Menecer",new {area = "Admin"});
+        }
+
+        //???????????????????
+        public async Task<ActionResult> EmployeePositionTable()
+        {
+            try
+            {
+                var menecer = HttpContext.Session.GetObjectFromJson<SessionUserModel>("UserData");
+                if (menecer != null)
+                {
+                    var bonuses = await dbContext.Bonus.Where(x => x.AppUserId == menecer.Id).ToListAsync();
+                    if (bonuses != null)
+                    {
+                        foreach(var emp in bonuses)
+                        {
+                          var EmployeeWork =  await dbContext.Placeswork.Where(x => x.EmployeeId == emp.EmployeeId).FirstOrDefaultAsync();
+                        }
+                       
+                        return View(bonuses);
+                    }
+                }
+            }
+            catch(Exception exp)
+            {
+                ModelState.AddModelError("", exp.Message);
+            }
+            return View();
+        }
+
 
         //[HttpPost]
         //public async Task<JsonResult> PagingMenecment(string count, int elmPage)

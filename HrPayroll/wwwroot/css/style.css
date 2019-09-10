@@ -2090,4 +2090,13 @@ blockquote p {font-style: italic;font-weight: 400;}
     border-radius: 26px;
 }
 
+.bonus-table {
+    padding: 0px 0px 0px 0px !important;
+    margin-top: 9px !important;
+    width: 50% !important;
+    margin-left: 12px !important;
+    cursor: pointer;
+    border: none !important;
+}
+
 

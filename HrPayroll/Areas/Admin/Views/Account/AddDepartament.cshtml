@@ -1,0 +1,85 @@
+﻿
+@{
+    ViewData["Title"] = "AddDepartament";
+}
+
+
+@using HrPayroll.Areas.Admin.Models
+@model Departament
+<div class="page-wrapper">
+    <!-- content -->
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase"></h5>
+                </div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card">
+                        <div class="page-title">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <div class="page-title"><a style="color:chocolate; cursor:pointer;"></a> Add Holding,Departament,Emporium,Position </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form class="row" method="post">
+                                        <div asp-validation-summary="ModelOnly"></div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group custom-mt-form-group">
+                                                <select id="data">
+                                                </select>
+                                                <label class="control-label" asp-for="Holding.Name">Holding Name</label><i class="bar"></i>
+                                                <span asp-validation-for="Holding.Name"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group custom-mt-form-group">
+                                                <input type="text" name="Name" asp-for="Name" />
+                                                <label class="control-label" asp-for="Name">Departament Name</label><i class="bar"></i>
+                                                <span asp-validation-for="Name"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <div class="form-group text-center custom-mt-form-group">
+                                                <button class="btn btn-primary mr-2" type="submit">Save</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        $.ajax({
+            url: "/Admin/Account/AjaxHolding",
+            dataType: "Json",
+            type: "post",
+            success: function (respons) {
+                if (respons.message == 202) {
+                    for (var i = 0; i < respons.company.length; i++) {
+                        var option = document.createElement('option');
+                        option.text = respons.company[i].name;
+                        option.value = respons.company[i].id;
+                        $("#data").append(option);
+                    }
+                }
+            }
+        });
+    });
+</script>
+

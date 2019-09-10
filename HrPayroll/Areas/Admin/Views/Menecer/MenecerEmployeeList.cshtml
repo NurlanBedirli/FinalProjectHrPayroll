@@ -58,7 +58,10 @@
                 </div>
             </div>
             <div class="row" style="margin-bottom:20px;">
-                <div class="col-md-3 showw1" id="addemp" style="display:none">
+                <div class="showw1" id="addemp" style="display:none;margin-left: 1%;">
+                    <a class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i>Work Attandance</a>
+                </div>
+                <div class="showw2" id="addemp" style="display:none;margin-left: 1%;">
                     <a class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i>Work Attandance</a>
                 </div>
             </div>
@@ -137,24 +140,21 @@
 </div>
 <script>
     document.addEventListener("DOMContentLoaded", function () {
-        //$("#pagesizelist").on("change", function (event) {
-        //    var pageSize = (this).value;
-        //    var form = document.getElementById("formm");
-        //    form.setAttribute("href", "Admin/Menecer/MenecerEmployeeList/" + pageSize);
-        //     form.submit();
-        //});
-
 
         $("#tbody").on("click", "tbody tr td div #Workattadence ", function () {
             var id = $(this).val();
+            var elm1 = document.querySelector(".showw1");
+            var elm2 = document.querySelector(".showw2");
+
             if ($(this).prop("checked") == true) {
-                var elm1 = document.querySelector(".showw1");
                 elm1.querySelector("a").setAttribute("href", "/Admin/Menecer/WorkAttendance/" + id);
+                elm2.querySelector("a").setAttribute("href", "/Admin/Menecer/BonusEmployee/" + id);
                 elm1.style.display = "block";
+                elm2.style.display = "block";
             }
             else {
-                var elm1 = document.querySelector(".showw1");
                 elm1.style.display = "none";
+                elm2.style.display = "none";
             }
         });
     });

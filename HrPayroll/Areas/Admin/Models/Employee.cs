@@ -60,5 +60,7 @@ namespace HrPayroll.Areas.Admin.Models
         public List<WorkEndDate> WorkEndDates { get; set; }
 
         public List<WorkPlace> WorkPlaces { get; set; }
+
+        public List<Bonus> Bonus { get; set; }
     }
 }

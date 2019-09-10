@@ -10,7 +10,7 @@ namespace HrPayroll.Areas.Admin.BLL
 {
     public static class PenaltyCalculate
     {
-        public static async Task  EmployeePenaltySum(this PayrollDbContext payrollDb,int? count,int? employeeId)
+        public static async Task  EmployeePenaltySum(this PayrollDbContext payrollDb,int? count,int? employeeId,DateTime date)
         {
             if(count != null)
             {
@@ -33,7 +33,9 @@ namespace HrPayroll.Areas.Admin.BLL
                                 Email = employee.Email,
                                 DistrictRegistration = employee.DistrictRegistration,
                                 IDCardSerialNumber = employee.IDCardSerialNumber,
-                                PlasiyerCode = employee.PlasiyerCode
+                                PlasiyerCode = employee.PlasiyerCode,
+                                EndDate = date.AddDays((double)-count)
+                                
                             };//isden cixanlar
                             payrollDb.Dismisseds.Add(dismissed);
                             payrollDb.Employees.Remove(employee);
@@ -66,7 +68,7 @@ namespace HrPayroll.Areas.Admin.BLL
         }
 
 
-         public static bool CountIsBigNumberMax(int count,int max)
+        public static bool CountIsBigNumberMax(int count,int max)
         {
             bool Iscount = false;
 
