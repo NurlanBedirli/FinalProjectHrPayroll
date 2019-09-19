@@ -40,6 +40,8 @@
                         content.find("td.item4").text(`${response.data[i].startDate}`);
                         content.find("td.item5").text(`${response.data[i].salary}`);
                         content.find("td.item5").append(` <span> Azn</span>`);
+                        content.find("a.change").attr("href", "/Admin/Reciurment/ChangePlaceEmployee/?id=" + response.data[i].id);
+                        content.find("a.delete").attr("href", "/Admin/Reciurment/DeletePlaceEmployee/?id=" + response.data[i].id);
                         $("#all-emp-work").append(content);
                     }
                     if (response.message == 202) {
@@ -73,6 +75,7 @@
             }
         });
     });
+
 
     $("#pageItem").on("change", function () {
         var searchValue = search.value;
@@ -109,6 +112,8 @@
                         content.find("td.item4").text(`${response.data[i].startDate}`);
                         content.find("td.item5").text(`${response.data[i].salary}`);
                         content.find("td.item5").append(` <span> Azn</span>`);
+                        content.find("a.change").attr("href", "/Admin/Reciurment/ChangePlaceEmployee/?id=" + response.data[i].id);
+                        content.find("a.delete").attr("href", "/Admin/Reciurment/DeletePlaceEmployee/?id=" + response.data[i].id);
                         $("#all-emp-work").append(content);
                     }
                     if (response.message == 202) {
@@ -184,6 +189,8 @@
                 content.find("td.item4").text(`${people[i].startDate}`);
                 content.find("td.item5").text(`${people[i].salary}`);
                 content.find("td.item5").append(` <span> Azn</span>`);
+                content.find("a.change").attr("href", "/Admin/Reciurment/ChangePlaceEmployee/?id=" + people[i].id);
+                content.find("a.delete").attr("href", "/Admin/Reciurment/DeletePlaceEmployee/?id=" + people[i].id);
                 $("#all-emp-work").append(content);
             }
         }
@@ -227,6 +234,8 @@
                 content.find("td.item4").text(`${people[i].startDate}`);
                 content.find("td.item5").text(`${people[i].salary}`);
                 content.find("td.item5").append(` <span> Azn</span>`);
+                content.find("a.change").attr("href", "/Admin/Reciurment/ChangePlaceEmployee/?id=" + people[i].id);
+                content.find("a.delete").attr("href", "/Admin/Reciurment/DeletePlaceEmployee/?id=" + people[i].id);
                 $("#all-emp-work").append(content);
             }
         }
@@ -269,6 +278,8 @@
                 content.find("td.item4").text(`${people[i].startDate}`);
                 content.find("td.item5").text(`${people[i].salary}`);
                 content.find("td.item5").append(` <span> Azn</span>`);
+                content.find("a.change").attr("href", "/Admin/Reciurment/ChangePlaceEmployee/?id=" + people[i].id);
+                content.find("a.delete").attr("href", "/Admin/Reciurment/DeletePlaceEmployee/?id=" + people[i].id);
                 $("#all-emp-work").append(content);
             }
         }
@@ -370,6 +381,8 @@ $("#paging").on("click", "li #pagination-ajax-workplace", function () {
                     content.find("a.positionName").text(`${response.currentData[i].positionName}`);
                     content.find("td.item4").text(`${response.currentData[i].startDate}`);
                     content.find("td.item5").text(`${response.currentData[i].salary}`);
+                    content.find("a.change").attr("href", "/Admin/Reciurment/ChangePlaceEmployee/?id=" + response.currentData[i].id);
+                    content.find("a.delete").attr("href", "/Admin/Reciurment/DeletePlaceEmployee/?id=" + response.currentData[i].id);
                     $("#all-emp-work").append(content);
                 }
                 if (response.nextElement) {
@@ -442,6 +455,8 @@ $("#paging").on("click", "li #next1", function () {
                     content.find("td.item4").text(`${response.currentData[i].startDate}`);
                     content.find("td.item5").text(`${response.currentData[i].salary}`);
                     content.find("td.item5").append(` <span> Azn</span>`);
+                    content.find("a.change").attr("href", "/Admin/Reciurment/ChangePlaceEmployee/?id=" + response.currentData[i].id);
+                    content.find("a.delete").attr("href", "/Admin/Reciurment/DeletePlaceEmployee/?id=" + response.currentData[i].id);
                     $("#all-emp-work").append(content);
                 }
                 if (response.nextElement) {

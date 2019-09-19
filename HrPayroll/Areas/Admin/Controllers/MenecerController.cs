@@ -38,8 +38,8 @@ namespace HrPayroll.Areas.Admin.Controllers
         {
             return View();
         }
-        [HttpGet]
 
+        [HttpGet]
         public async Task<ActionResult> EmployeeList()
         {
            List<Employee> employees = new List<Employee>();
@@ -332,6 +332,9 @@ namespace HrPayroll.Areas.Admin.Controllers
                 var data =  HttpContext.Session.GetObjectFromJson<Employee>("Employ");
                 if(data != null)
                 {
+                    var bonusData = await dbContext.Bonus.Where(x => x.EmployeeId == data.Id).FirstOrDefaultAsync();
+                    if(bonusData == null)
+                    {
                     using (var transaction = await dbContext.Database.BeginTransactionAsync())
                     {
                         try
@@ -354,16 +357,20 @@ namespace HrPayroll.Areas.Admin.Controllers
                         {
                             ModelState.AddModelError("", ex.Message);
                         }
-                       
                     }
+
+                    }
+                    ModelState.AddModelError("", "Such an employee already has a bonus");
                 }
             }
             return RedirectToAction("EmployeePositionTable","Menecer",new {area = "Admin"});
         }
 
-        //???????????????????
+        [HttpGet]
         public async Task<ActionResult> EmployeePositionTable()
         {
+            List<WorkPlace> workPlaces = new List<WorkPlace>();
+            List<MenecerEmployeeBonusModel> employeeBonusModels = new List<MenecerEmployeeBonusModel>();
             try
             {
                 var menecer = HttpContext.Session.GetObjectFromJson<SessionUserModel>("UserData");
@@ -375,9 +382,22 @@ namespace HrPayroll.Areas.Admin.Controllers
                         foreach(var emp in bonuses)
                         {
                           var EmployeeWork =  await dbContext.Placeswork.Where(x => x.EmployeeId == emp.EmployeeId).FirstOrDefaultAsync();
+                            workPlaces.Add(EmployeeWork);
                         }
-                       
-                        return View(bonuses);
+                        foreach(var place in workPlaces)
+                        {
+                            MenecerEmployeeBonusModel bonusModel = new MenecerEmployeeBonusModel
+                            {
+                                Emporium = await dbContext.Emporia.Where(x => x.Id == place.EmporiumId).Select(y => y.Name).FirstOrDefaultAsync(),
+                                Position = await dbContext.Positions.Where(x => x.Id == place.PositionsId).Select(y => y.Name).FirstOrDefaultAsync(),
+                                Name = await dbContext.Employees.Where(x => x.Id == place.EmployeeId).Select(y => y.Name).FirstOrDefaultAsync(),
+                                Bonus = bonuses.Where(x => x.EmployeeId == place.EmployeeId).Select(y => y.BonusPrize).FirstOrDefault(),
+                                StartDate = place.StarDate,
+                                EmployeeId = place.EmployeeId
+                            };
+                            employeeBonusModels.Add(bonusModel);
+                        }
+                        return View(employeeBonusModels);
                     }
                 }
             }
@@ -385,9 +405,23 @@ namespace HrPayroll.Areas.Admin.Controllers
             {
                 ModelState.AddModelError("", exp.Message);
             }
-            return View();
+            return RedirectToAction(nameof(MenecerEmployeeList));
         }
 
+        [HttpPost]
+        public async Task<ActionResult> BonusEdit(int? id)
+        {
+            if(id !=null)
+            {
+               var Bonusdata =  await dbContext.Bonus.Where(x => x.EmployeeId == id).FirstOrDefaultAsync();
+
+                if(Bonusdata != null)
+                {
+                    return View(Bonusdata);
+                }
+            }
+            return View();
+        }
 
         //[HttpPost]
         //public async Task<JsonResult> PagingMenecment(string count, int elmPage)

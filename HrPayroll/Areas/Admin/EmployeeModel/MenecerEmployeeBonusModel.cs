@@ -12,5 +12,6 @@ namespace HrPayroll.Areas.Admin.EmployeeModel
         public string Position { get; set; }
         public DateTime StartDate { get; set; } 
         public decimal Bonus { get; set; }
+        public int EmployeeId { get; set; }
     }
 }

@@ -322,12 +322,17 @@
         if ($(this).prop("checked") == true) {
             var elm1 = document.querySelector(".showw1");
             var elm2 = document.querySelector(".showw2");
+            var elm3 = document.querySelector(".showw3");
             elm1.style.display = "block";
+            elm3.style.display = "block";
             elm1.querySelector("a").setAttribute("href", "/Admin/Reciurment/AddNewWorkPlace/" + id);
+            elm3.querySelector("a").setAttribute("href", "/Admin/Reciurment/AddEndPosition/" + id);
         }
         else {
             var elm1 = document.querySelector(".showw1");
+            var elm3 = document.querySelector(".showw3");
             elm1.style.display = "none";
+            elm3.style.display = "none";
         }
     });
 

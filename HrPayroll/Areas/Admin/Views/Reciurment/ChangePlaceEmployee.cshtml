@@ -1,7 +1,8 @@
 ﻿
 @{
-    ViewData["Title"] = "AddNewWorkPlace";
+    ViewData["Title"] = "ChangePlaceEmployee";
 }
+
 @using HrPayroll.Areas.Admin.EmployeeModel
 @model WorkPlaceModel
 <div class="page-wrapper">
@@ -14,17 +15,17 @@
                         <div class="page-title">
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                    @if (Context.Session.GetObjectFromJson<Employee>("Employ") != null)
-                                            {
-                                                var data = Context.Session.GetObjectFromJson<Employee>("Employ");
-             <div class="Page-title"><a asp-controller="Employee" asp-area="Admin" asp-action="AboutEmployee" asp-route-page="@data.Id" style="font-weight:bold">@data.Name @data.Surname</a> new Workplace</div>
+                                    @if (Context.Session.GetObjectFromJson<Employee>("Employe") != null)
+                                    {
+                                        var data = Context.Session.GetObjectFromJson<Employee>("Employe");
+                                        <div class="Page-title"><a asp-controller="Employee" asp-area="Admin" asp-action="AboutEmployee" asp-route-page="@data.Id" style="font-weight:bold">@data.Name @data.Surname</a> Change Workplace</div>
                                     }
                                 </div>
                             </div>
                         </div>
                         <div class="card-body">
                             <div class="">
-                                <form class="row"  method="post">
+                                <form class="row" method="post">
                                     <div asp-validation-summary="ModelOnly"></div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12" id="addnewWork">
                                         <div class="form-group custom-mt-form-group">

@@ -1,9 +1,9 @@
-﻿
-@{
-    ViewData["Title"] = "BonusEmployee";
+﻿@{
+    ViewData["Title"] = "AddEndPosition";
 }
+
 @using HrPayroll.Areas.Admin.Models
-@model Bonus
+@model WorkEndDate
 <div class="page-wrapper">
     <!-- content -->
     <div class="content container-fluid">
@@ -17,7 +17,7 @@
                                     @if (Context.Session.GetObjectFromJson<Employee>("Employ") != null)
                                     {
                                         var data = Context.Session.GetObjectFromJson<Employee>("Employ");
-                                        <div class="Page-title"><a href="/Admin/Employee/AboutEmployee/?page=@data.Id">@data.Name @data.Surname</a> Employee Attandance</div>
+                                        <div class="Page-title"><a asp-controller="Employee" asp-area="Admin" asp-action="AboutEmployee" asp-route-page="@data.Id" style="font-weight:bold">@data.Name @data.Surname</a> new Workplace</div>
                                     }
                                 </div>
                             </div>
@@ -28,22 +28,12 @@
                                     <div asp-validation-summary="ModelOnly"></div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                                         <div class="form-group custom-mt-form-group">
-                                            <span asp-validation-for="BonusDate"></span>
-                                            <input type="date" asp-for="BonusDate">
-                                            <label class="control-label">Bonus Date</label><i class="bar"></i>
-                                        </div>
-                                        <div class="form-group">
-                                            <textarea id="message" class="form__field" rows="2" asp-for="BonusStatus" name="BonusStatus"></textarea>
-                                            <label for="message" class="form-label" asp-for="BonusStatus">Status</label>
-                                            <span asp-validation-for="BonusStatus"></span>
+                                            <input type="date" asp-for="EndDate" />
+                                            <span asp-validation-for="EndDate"></span>
+                                            <label class="control-label">End Date</label><i class="bar"></i>
                                         </div>
                                     </div>
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-12">
-                                        <div class="form-group custom-mt-form-group">
-                                            <span asp-validation-for="BonusPrize"></span>
-                                            <input type="number" asp-for="BonusPrize" />
-                                            <label class="control-label">Bonus Prize</label><i class="bar"></i>
-                                        </div>
                                     </div>
                                     <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                         <div class="form-group text-center custom-mt-form-group">
@@ -59,6 +49,4 @@
         </div>
     </div>
 </div>
-
-
 

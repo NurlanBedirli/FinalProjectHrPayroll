@@ -1,0 +1,74 @@
+﻿
+@{
+    ViewData["Title"] = "BonusEdit";
+}
+
+@using HrPayroll.Areas.Admin.EmployeeModel
+@model Bonus
+<div class="page-wrapper">
+    <!-- content -->
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase"></h5>
+                </div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card">
+                        <div class="page-title">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                    @if (Context.Session.GetObjectFromJson<Employee>("Employ") != null)
+                                    {
+                                        var data = Context.Session.GetObjectFromJson<Employee>("Employ");
+                                        <div class="page-title"><a style="color:chocolate; cursor:pointer;">@data.Name  @data.Surname</a> Edit Education </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form class="row" method="post">
+                                        <div asp-validation-summary="ModelOnly"></div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group custom-mt-form-group">
+                                                <input type="text" asp-for="BonusDate" name="BonusDate">
+                                                <label class="control-label" asp-for="BonusDate">University Faculty</label><i class="bar"></i>
+                                                <span asp-validation-for="BonusDate"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group custom-mt-form-group">
+                                                <input type="text" name="BonusPrize" asp-for="BonusPrize" />
+                                                <label class="control-label" asp-for="BonusPrize">University Name</label><i class="bar"></i>
+                                                <span asp-validation-for="BonusPrize"></span>
+                                            </div>
+                                            <div class="form-group">
+                                                <textarea id="message" class="form__field" rows="4" asp-for="BonusStatus" name="BonusStatus"></textarea>
+                                                <label for="message" class="form-label" asp-for="BonusStatus">Status</label>
+                                                <span asp-validation-for="BonusStatus"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <div class="form-group text-center custom-mt-form-group">
+                                                <button class="btn btn-primary mr-2" type="submit">Save</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

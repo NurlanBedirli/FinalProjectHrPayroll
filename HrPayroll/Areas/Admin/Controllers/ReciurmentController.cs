@@ -174,6 +174,99 @@ namespace HrPayroll.Areas.Admin.Controllers
             return View(paging);
         }
 
+        [HttpGet]
+        public async Task<ActionResult> ChangePlaceEmployee(int? id)
+        {
+            if (!id.HasValue)
+                return NotFound();
+                 var employee = await dbContext.Employees.Where(x => x.Id == id).FirstOrDefaultAsync();
+                 HttpContext.Session.SetObjectAsJson("Employe", employee);
+
+            var data = await dbContext.Placeswork.Where(x => x.EmployeeId == id).FirstOrDefaultAsync();
+            if (data == null)
+                return NotFound();
+
+            var holding = dbContext.Holdings.ToList();
+            HttpContext.Session.SetObjectAsJson("Holding", holding);
+            
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> ChangePlaceEmployee(WorkPlaceModel workPlace)
+        {
+            if(ModelState.IsValid)
+            {
+                try
+                {
+                var empId = HttpContext.Session.GetObjectFromJson<Employee>("Employe").Id;
+                    if (empId == 0)
+                        return NotFound();
+
+                var empWorkPlace = await dbContext.Placeswork.Where(x => x.EmployeeId == empId).FirstOrDefaultAsync();
+                if (empWorkPlace == null)
+                    return NotFound();
+
+                    
+                    var salary = await dbContext.EmployeeSalaries.Where(x => x.PositionsId == empWorkPlace.PositionsId).FirstOrDefaultAsync();
+                    using (var transaction = await dbContext.Database.BeginTransactionAsync())
+                    {
+
+                            empWorkPlace.EmporiumId = (int)options.Value.EmporiumId;
+                            empWorkPlace.PositionsId = (int)options.Value.PositionsId;
+                            empWorkPlace.EmployeeId = empId;
+                            empWorkPlace.StarDate = workPlace.StartDate;
+                            dbContext.Placeswork.Update(empWorkPlace);
+
+                        WorkEndDate endDate = new WorkEndDate()
+                        {
+                            EmployeeId = empId,
+                            EndDate = workPlace.StartDate,
+                            Salary = salary.Salary,
+                        };
+                       await dbContext.WorkEnds.AddAsync(endDate);
+
+                          await dbContext.SaveChangesAsync();
+
+                             transaction.Commit();
+                    }
+                }
+                catch(Exception ex)
+                {
+                    ModelState.AddModelError("", ex.Message);
+                }
+            }
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> DeletePlaceEmployee(int? id)
+        {
+            if (!id.HasValue)
+                return NotFound();
+            var data = await dbContext.Placeswork.Where(x => x.EmployeeId == id).FirstOrDefaultAsync();
+            if (data == null)
+                return NotFound();
+            dbContext.Placeswork.Remove(data);
+            await dbContext.SaveChangesAsync();
+            return View();
+        }
+
+        [HttpGet]
+        public async Task<ActionResult> AddEndPosition(int? id)
+        {
+            if(id != null)
+            {
+                var data = await dbContext.Employees.Where(x => x.Id == id).FirstOrDefaultAsync();
+                if(data != null)
+                {
+                    HttpContext.Session.SetObjectAsJson("Employ", data);
+                }
+            }
+            return View();
+        }
+
+
         //Ajax Dropdrown holding,company,emporium,position,salary
         public async Task<JsonResult> AjaxHoldingComBox(string value)
         {
@@ -187,7 +280,6 @@ namespace HrPayroll.Areas.Admin.Controllers
                     }).FirstOrDefaultAsync();
           
             var companyName = holdings.Companies;
-         
 
             return Json(new { company = companyName, message = 202 });
         }
@@ -363,6 +455,7 @@ namespace HrPayroll.Areas.Admin.Controllers
                                         || x.Name.Contains(value) || x.Name.StartsWith(value)
                                            || x.PlasierCode.Contains(value) || x.PlasierCode.StartsWith(value)
                                               || x.Salary == salary).ToList();
+
 
                 paging.TotalItems = searchData.Count();
                 pageCount = Math.Ceiling(searchData.Count() / (decimal)elmpage);

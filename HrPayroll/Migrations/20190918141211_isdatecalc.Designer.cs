@@ -4,14 +4,16 @@ using HrPayroll.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace HrPayroll.Migrations
 {
     [DbContext(typeof(PayrollDbContext))]
-    partial class PayrollDbContextModelSnapshot : ModelSnapshot
+    [Migration("20190918141211_isdatecalc")]
+    partial class isdatecalc
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -462,7 +464,8 @@ namespace HrPayroll.Migrations
 
                     b.Property<bool>("IsCalcDate");
 
-                    b.Property<decimal>("Salary");
+                    b.Property<string>("StatusEndDateTime")
+                        .IsRequired();
 
                     b.HasKey("Id");
 

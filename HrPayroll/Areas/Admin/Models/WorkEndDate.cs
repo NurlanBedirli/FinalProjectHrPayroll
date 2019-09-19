@@ -12,8 +12,8 @@ namespace HrPayroll.Areas.Admin.Models
         [Required]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime EndDate { get; set; }
-        [Required]
-        public string StatusEndDateTime { get; set; }
+        public bool IsCalcDate { get; set; } = false;
+        public decimal Salary { get; set; }
         public Employee Employee { get; set; }
         public int EmployeeId { get; set; }
     }

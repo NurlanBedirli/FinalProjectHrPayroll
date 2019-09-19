@@ -240,7 +240,7 @@ namespace HrPayroll.Areas.Admin.Controllers
         [HttpGet]
         public async Task<ActionResult> AddHolding()
         {
-            await Task.Delay(0);
+            var holding = await payrollDb.Holdings.ToListAsync();
             return View();
         }
         [HttpPost]
@@ -368,6 +368,18 @@ namespace HrPayroll.Areas.Admin.Controllers
         }
 
         //Ajax Query
+        public async Task<JsonResult> AddHolding(string value)
+        {
+            if(string.IsNullOrEmpty(value))
+                return Json(new {message = 404 });
+            Holding holdin = new Holding
+            {
+                Name = value
+            };
+            await payrollDb.Holdings.AddAsync(holdin);
+            await payrollDb.SaveChangesAsync();
+            return Json(new { message = 202, data = payrollDb.Holdings.ToList()});
+        }
         [HttpPost]
         public async  Task<JsonResult> AjaxHolding()
         {

@@ -21,7 +21,7 @@
                         <div class="page-title">
                             <div class="row">
                                 <div class="col-lg-12 col-md-12 col-sm-12 col-12">
-                                    <div class="page-title"><a style="color:chocolate; cursor:pointer;"></a> Add Holding,Departament,Emporium,Position </div>
+                                    <div class="page-title"><a style="color:chocolate; cursor:pointer;"></a> Add Holding</div>
                                 </div>
                             </div>
                         </div>
@@ -29,28 +29,77 @@
                             <div class="row">
                                 <div class="col-md-12">
                                     @*//Add Holding*@
-                                    <form class="row" method="post">
+                                    <form class="row">
                                         <div asp-validation-summary="ModelOnly"></div>
                                         <div class="col-lg-6 col-md-6 col-sm-6 col-12">
                                             <div class="form-group custom-mt-form-group">
-                                                <input type="text" name="UniversityName" asp-for="Name" />
+                                                <input type="text" name="Name" id="HoldingName" asp-for="Name" />
                                                 <label class="control-label" asp-for="Name">Holding Name</label><i class="bar"></i>
                                                 <span asp-validation-for="Name"></span>
                                             </div>
                                         </div>
                                         <div class="col-lg-12 col-md-12 col-sm-12 col-12">
                                             <div class="form-group text-center custom-mt-form-group">
-                                                <button class="btn btn-primary mr-2" type="submit">Save</button>
+                                                <button class="btn btn-primary mr-2" id="add" type="submit">Save</button>
                                             </div>
                                         </div>
                                     </form>
                                 </div>
                             </div>
                         </div>
+                        <table class="table table-striped" style="color: orange; width: 70%; margin: auto;">
+                            <thead>
+                                <tr>
+                                    <th class="col-md-2">Holding</th>
+                                    <th class="col-md-9">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="del_hol">
+                                <tr>
+                                    <td>Mark</td>
+                                    <td>
+                                        <div class="dropdown dropdown-action">
+                                            <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                            <div class="dropdown-menu dropdown-menu-right">
+                                                <a class="dropdown-item delete" asp-controller="Reciurment" asp-area="Admin" asp-action="DeletePlaceEmployee" title="Delete"><i class="fa fa-trash-o m-r-5"></i>Delete</a>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        $("#add").on("click", function (e) {
+                                         e.preventDefault();
+             
+            var value = $("#HoldingName").val();
+
+            $.ajax({
+                url:"/Admin/Account/AddHolding",
+                data:{
+                    value: value
+                },
+                dataType:"Json",
+                type: "Post",
+                success: function (respons) {
+                    if (respons.message = 202) {
+                        for (var elm of respons.data) {
+                            var td = $("#del_hol tr").clone();
+                            console.log(td);
+                        }
+                    }
+                }
+
+            });
+        });
+    });
+</script>
 
