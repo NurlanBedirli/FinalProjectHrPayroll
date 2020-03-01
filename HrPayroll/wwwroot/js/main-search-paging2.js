@@ -323,14 +323,24 @@
             var elm1 = document.querySelector(".showw1");
             var elm2 = document.querySelector(".showw2");
             var elm3 = document.querySelector(".showw3");
+            var elm4 = document.querySelector(".showw4");
             elm1.style.display = "block";
+            elm1.style.cursor = "pointer";
+
             elm3.style.display = "block";
+            elm3.style.cursor = "pointer";
+
+            elm4.style.display = "block";
+            elm4.style.cursor = "pointer";
+
             elm1.querySelector("a").setAttribute("href", "/Admin/Reciurment/AddNewWorkPlace/" + id);
             elm3.querySelector("a").setAttribute("href", "/Admin/Reciurment/AddEndPosition/" + id);
+            elm4.querySelector("a").setAttribute("href", "/Admin/Menecer/AdminMessageReciurment/" + id);
         }
         else {
             var elm1 = document.querySelector(".showw1");
             var elm3 = document.querySelector(".showw3");
+            var elm4 = document.querySelector(".showw4");
             elm1.style.display = "none";
             elm3.style.display = "none";
         }

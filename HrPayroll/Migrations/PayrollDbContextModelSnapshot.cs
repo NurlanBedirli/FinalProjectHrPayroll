@@ -48,6 +48,33 @@ namespace HrPayroll.Migrations
                     b.ToTable("Educations");
                 });
 
+            modelBuilder.Entity("HrPayroll.Areas.Admin.EmployeeModel.EmployeeChangePositionRol", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AppUserId");
+
+                    b.Property<bool>("CalcSalary");
+
+                    b.Property<string>("Company");
+
+                    b.Property<string>("Emporium");
+
+                    b.Property<DateTime>("EndDate");
+
+                    b.Property<string>("Position");
+
+                    b.Property<decimal>("Salary");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("ChangePositionRols");
+                });
+
             modelBuilder.Entity("HrPayroll.Areas.Admin.EmployeeModel.Gender", b =>
                 {
                     b.Property<int>("Id")
@@ -230,6 +257,25 @@ namespace HrPayroll.Migrations
                     b.ToTable("Dismisseds");
                 });
 
+            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmployeAccuredSalary", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("AccuredDate");
+
+                    b.Property<int>("EmployeeId");
+
+                    b.Property<decimal>("Salary");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("EmployeAccuredSalaries");
+                });
+
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.Employee", b =>
                 {
                     b.Property<int>("Id")
@@ -295,7 +341,8 @@ namespace HrPayroll.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("PositionsId");
+                    b.HasIndex("PositionsId")
+                        .IsUnique();
 
                     b.ToTable("EmployeeSalaries");
                 });
@@ -340,6 +387,25 @@ namespace HrPayroll.Migrations
                     b.ToTable("EmporiumAppUsers");
                 });
 
+            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmporiumMonthSale", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("Date");
+
+                    b.Property<int>("EmporiumId");
+
+                    b.Property<decimal>("Prize");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmporiumId");
+
+                    b.ToTable("EmporiumMonths");
+                });
+
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmporiumPosition", b =>
                 {
                     b.Property<int>("Id")
@@ -365,11 +431,89 @@ namespace HrPayroll.Migrations
                         .ValueGeneratedOnAdd()
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Name");
+                    b.Property<string>("Name")
+                        .IsRequired();
 
                     b.HasKey("Id");
 
                     b.ToTable("Holdings");
+                });
+
+            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.MessageReciurment", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Email");
+
+                    b.Property<int>("EmployeeId");
+
+                    b.Property<string>("FirstName");
+
+                    b.Property<string>("PhoneNumber");
+
+                    b.Property<string>("SecondName");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("MessageReciurments");
+                });
+
+            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.MonthSale", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<DateTime>("DateQuata");
+
+                    b.Property<int>("EmporiumId");
+
+                    b.Property<decimal>("Prize");
+
+                    b.Property<decimal>("Quata");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmporiumId");
+
+                    b.ToTable("MonthSales");
+                });
+
+            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.OficeEmployee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("AppUserId");
+
+                    b.Property<DateTime>("StarDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("AppUserId");
+
+                    b.ToTable("OficeEmployees");
+                });
+
+            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.OficeSalary", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("RoleManagerId")
+                        .IsRequired();
+
+                    b.Property<decimal>("Salary");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("OficeSalaries");
                 });
 
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.Penalty", b =>
@@ -419,7 +563,8 @@ namespace HrPayroll.Migrations
 
                     b.HasIndex("DepartamentId");
 
-                    b.HasIndex("PositionsId");
+                    b.HasIndex("PositionsId")
+                        .IsUnique();
 
                     b.ToTable("PositionsDepartaments");
                 });
@@ -450,6 +595,27 @@ namespace HrPayroll.Migrations
                     b.ToTable("SignInOutReasons");
                 });
 
+            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.VacationEmployee", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<bool>("CalcSalary");
+
+                    b.Property<int>("EmployeeId");
+
+                    b.Property<DateTime>("EndDate");
+
+                    b.Property<DateTime>("StarDate");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmployeeId");
+
+                    b.ToTable("VacationEmployees");
+                });
+
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.WorkEndDate", b =>
                 {
                     b.Property<int>("Id")
@@ -461,6 +627,8 @@ namespace HrPayroll.Migrations
                     b.Property<DateTime>("EndDate");
 
                     b.Property<bool>("IsCalcDate");
+
+                    b.Property<string>("PositionName");
 
                     b.Property<decimal>("Salary");
 
@@ -488,7 +656,8 @@ namespace HrPayroll.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EmployeeId");
+                    b.HasIndex("EmployeeId")
+                        .IsUnique();
 
                     b.HasIndex("EmporiumId");
 
@@ -679,6 +848,13 @@ namespace HrPayroll.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("HrPayroll.Areas.Admin.EmployeeModel.EmployeeChangePositionRol", b =>
+                {
+                    b.HasOne("HrPayroll.Models.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId");
+                });
+
             modelBuilder.Entity("HrPayroll.Areas.Admin.EmployeeModel.OldWorkPlace", b =>
                 {
                     b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
@@ -718,16 +894,24 @@ namespace HrPayroll.Migrations
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.Departament", b =>
                 {
                     b.HasOne("HrPayroll.Areas.Admin.Models.Holding", "Holding")
-                        .WithMany()
+                        .WithMany("Departaments")
                         .HasForeignKey("HoldingId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmployeAccuredSalary", b =>
+                {
+                    b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
+                        .WithMany("AccuredSalaries")
+                        .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmployeeSalary", b =>
                 {
                     b.HasOne("HrPayroll.Areas.Admin.Models.Positions", "Positions")
-                        .WithMany("EmployeeSalaries")
-                        .HasForeignKey("PositionsId")
+                        .WithOne("EmployeeSalaries")
+                        .HasForeignKey("HrPayroll.Areas.Admin.Models.EmployeeSalary", "PositionsId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -751,6 +935,14 @@ namespace HrPayroll.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmporiumMonthSale", b =>
+                {
+                    b.HasOne("HrPayroll.Areas.Admin.Models.Emporium", "Emporium")
+                        .WithMany("EmporiumMonthSales")
+                        .HasForeignKey("EmporiumId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.EmporiumPosition", b =>
                 {
                     b.HasOne("HrPayroll.Areas.Admin.Models.Emporium", "Emporium")
@@ -762,6 +954,29 @@ namespace HrPayroll.Migrations
                         .WithMany("EmporiumPositions")
                         .HasForeignKey("PositionsId")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.MessageReciurment", b =>
+                {
+                    b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
+                        .WithMany()
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.MonthSale", b =>
+                {
+                    b.HasOne("HrPayroll.Areas.Admin.Models.Emporium", "Emporium")
+                        .WithMany("MonthSales")
+                        .HasForeignKey("EmporiumId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.OficeEmployee", b =>
+                {
+                    b.HasOne("HrPayroll.Models.AppUser", "AppUser")
+                        .WithMany()
+                        .HasForeignKey("AppUserId");
                 });
 
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.Penalty", b =>
@@ -780,8 +995,8 @@ namespace HrPayroll.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("HrPayroll.Areas.Admin.Models.Positions", "Positions")
-                        .WithMany()
-                        .HasForeignKey("PositionsId")
+                        .WithOne("PositionsDepartaments")
+                        .HasForeignKey("HrPayroll.Areas.Admin.Models.PositionsDepartament", "PositionsId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -789,6 +1004,14 @@ namespace HrPayroll.Migrations
                 {
                     b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
                         .WithMany("SignInOutReasonTbls")
+                        .HasForeignKey("EmployeeId")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("HrPayroll.Areas.Admin.Models.VacationEmployee", b =>
+                {
+                    b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
+                        .WithMany("VacationEmployees")
                         .HasForeignKey("EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -804,8 +1027,8 @@ namespace HrPayroll.Migrations
             modelBuilder.Entity("HrPayroll.Areas.Admin.Models.WorkPlace", b =>
                 {
                     b.HasOne("HrPayroll.Areas.Admin.Models.Employee", "Employee")
-                        .WithMany("WorkPlaces")
-                        .HasForeignKey("EmployeeId")
+                        .WithOne("WorkPlaces")
+                        .HasForeignKey("HrPayroll.Areas.Admin.Models.WorkPlace", "EmployeeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("HrPayroll.Areas.Admin.Models.Emporium", "Emporium")

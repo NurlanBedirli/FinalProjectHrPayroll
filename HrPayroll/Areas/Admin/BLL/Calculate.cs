@@ -8,16 +8,20 @@ using System.Threading.Tasks;
 
 namespace HrPayroll.Areas.Admin.BLL
 {
-    public static class PenaltyCalculate
+    public static class Calculate
     {
         public static async Task  EmployeePenaltySum(this PayrollDbContext payrollDb,int? count,int? employeeId,DateTime date)
         {
             if(count != null)
             {
-                var positions = await payrollDb.Placeswork.Where(x => x.EmployeeId == employeeId).FirstOrDefaultAsync();
-                if(positions != null)
+               decimal? amount = payrollDb.Placeswork.Where(x => x.EmployeeId == employeeId)
+                                      .Include(x => x.Positions)
+                                        .ThenInclude(x => x.EmployeeSalaries)
+                                          .Single().Positions.EmployeeSalaries.Salary;
+
+
+                if(amount.HasValue)
                 {
-                    var amount = await payrollDb.EmployeeSalaries.Where(x => x.PositionsId == positions.PositionsId).FirstOrDefaultAsync();
                     var WillBeFined = await payrollDb.DisciplinePenalties.FirstOrDefaultAsync();//olunacaq cerime
                     if(WillBeFined != null)
                     {
@@ -43,7 +47,7 @@ namespace HrPayroll.Areas.Admin.BLL
                         }
                         else
                         {
-                           var penaltyAmount =  SalaryPenalty(amount.Salary, (int)count, WillBeFined.PenaltyValue);
+                           var penaltyAmount =  SalaryPenalty((decimal)amount, (int)count, WillBeFined.PenaltyValue);
                             Penalty penalty = new Penalty
                             {
                                 Amount = penaltyAmount,
@@ -58,15 +62,13 @@ namespace HrPayroll.Areas.Admin.BLL
             }
         }
 
-
         public static decimal SalaryPenalty(decimal amount,int count,int willBeFinedvalue)
         {
             var date = DateTime.DaysInMonth(DateTime.Now.Year, DateTime.Now.Month);
-            var DivideByMonth = amount / date;
+            var DivideByMonth = DaySalary(amount,date);
             var penalty = (DivideByMonth * count) * willBeFinedvalue;
             return penalty;
         }
-
 
         public static bool CountIsBigNumberMax(int count,int max)
         {
@@ -96,6 +98,35 @@ namespace HrPayroll.Areas.Admin.BLL
         }
 
 
+
+
+        /// <summary>
+        ///  Calculate employee salary
+        /// </summary>
+        /// <returns></returns>
+        //Vacation salary
+        public static decimal VacationSalary(decimal salary,decimal days,decimal vacationDays)
+        {
+           return (DaySalary(salary,days) / 2) * vacationDays;
+        }
+
+        //Attandance salary 
+        public static decimal AttandanceSalary(decimal salary, decimal days,decimal attandance)
+        {
+            return DaySalary(salary, days) * attandance;
+        }
+
+        //day salary 
+        public static decimal DaySalary(decimal salary, decimal days)
+        {
+            return salary / (decimal)days;
+        }
+
+        //total salary
+        public static decimal TotalSalary(decimal quataBonus,decimal attandanceSalary,decimal VacationSalary,decimal bonus,decimal penalty,decimal attandancePenalty)
+        {
+            return quataBonus + attandanceSalary + VacationSalary + bonus - penalty - attandancePenalty;
+        }
     }
 
 }

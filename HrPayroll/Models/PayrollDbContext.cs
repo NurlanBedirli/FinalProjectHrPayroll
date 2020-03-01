@@ -39,6 +39,14 @@ namespace HrPayroll.Models
         public DbSet<DisciplinePenalty> DisciplinePenalties { get; set; }
         public DbSet<Dismissed> Dismisseds { get; set; }
         public DbSet<Bonus> Bonus { get; set; }
+        public DbSet<MessageReciurment> MessageReciurments { get; set; }
+        public DbSet<VacationEmployee> VacationEmployees { get; set; }
+        public DbSet<OficeSalary> OficeSalaries { get; set; }
+        public DbSet<OficeEmployee> OficeEmployees { get; set; }
+        public DbSet<EmployeeChangePositionRol> ChangePositionRols { get; set; }
+        public DbSet<EmporiumMonthSale> EmporiumMonths { get; set; }
+        public DbSet<MonthSale> MonthSales { get; set; }
+        public DbSet<EmployeAccuredSalary> EmployeAccuredSalaries { get; set; }
 
         //Fluent API
         protected override void OnModelCreating(ModelBuilder builder)
@@ -75,7 +83,7 @@ namespace HrPayroll.Models
 
             builder.Entity<WorkPlace>()
              .HasOne(x => x.Employee)
-               .WithMany(y => y.WorkPlaces)
+               .WithOne(y => y.WorkPlaces)
                  .OnDelete(DeleteBehavior.Cascade);
 
             builder.Entity<Bonus>()

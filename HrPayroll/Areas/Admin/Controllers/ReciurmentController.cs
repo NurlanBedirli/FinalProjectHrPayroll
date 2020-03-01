@@ -34,6 +34,7 @@ namespace HrPayroll.Areas.Admin.Controllers
             return View();
         }
 
+        [HttpGet]
         public async Task<ActionResult> EmployeeAll(int? page)
         {
             if (page == null)
@@ -125,32 +126,28 @@ namespace HrPayroll.Areas.Admin.Controllers
             return View();
         }
 
+        [HttpGet]
         public async Task<ActionResult> AllWorkPlaceEmployee()
         {
-            List<EmployeeInfoWorkPlace> employeeInfo = new List<EmployeeInfoWorkPlace>();
-            var infoEmployee = await dbContext.Placeswork.ToListAsync();
-            foreach(var place in infoEmployee)
-            {
-                var emp = await dbContext.Employees.Where(x => x.Id == place.EmployeeId).FirstOrDefaultAsync();
-                var emporia = await dbContext.Emporia.Where(x => x.Id == place.EmporiumId).FirstOrDefaultAsync();
-                var company = await dbContext.Companies.Where(x => x.Id == emporia.CompanyId).FirstOrDefaultAsync();
-                var positions = await dbContext.Positions.Where(x => x.Id == place.PositionsId).FirstOrDefaultAsync();
-                var salary = await dbContext.EmployeeSalaries.Where(x => x.PositionsId == place.PositionsId).FirstOrDefaultAsync();
-                DateTime date = place.StarDate;
-                EmployeeInfoWorkPlace infoWorkPlace = new EmployeeInfoWorkPlace
-                {
-                    CompanyName = company.Name,
-                    EmperiumName = emporia.Name,
-                    PositionName = positions.Name,
-                    PlasierCode = emp.PlasiyerCode,
-                    Salary = salary.Salary,
-                    Name = emp.Name + " " + emp.Surname,
-                    Photo = emp.Photo,
-                    StartDate = date,
-                    id = emp.Id
-                };
-                employeeInfo.Add(infoWorkPlace);
-            }
+
+           var employeeInfo = await dbContext.Placeswork.Include(x => x.Employee)
+                        .Include(x => x.Emporium)
+                               .ThenInclude(x => x.Company)
+                                   .Include(x => x.Positions)
+                                      .ThenInclude(x => x.EmployeeSalaries)
+                                         .AsNoTracking()
+                                            .Select(x => new EmployeeInfoWorkPlace
+                                             {
+                                             CompanyName = x.Emporium.Company.Name,
+                                             EmperiumName = x.Emporium.Name,
+                                             PositionName = x.Positions.Name,
+                                             Salary = x.Positions.EmployeeSalaries.Salary,
+                                             Name = x.Employee.Name + " " + x.Employee.Surname,
+                                             Photo = x.Employee.Photo,
+                                             StartDate = x.StarDate,
+                                             id = x.EmployeeId
+                                             }).ToListAsync();
+
             var page = 1;
             int elmPage = 5;
             var pageCount = Math.Ceiling(employeeInfo.Count() / (decimal)elmPage);
@@ -179,10 +176,16 @@ namespace HrPayroll.Areas.Admin.Controllers
         {
             if (!id.HasValue)
                 return NotFound();
-                 var employee = await dbContext.Employees.Where(x => x.Id == id).FirstOrDefaultAsync();
+
+                 var employee = await dbContext.Employees
+                                  .Where(x => x.Id == id)
+                                       .FirstOrDefaultAsync();
+
                  HttpContext.Session.SetObjectAsJson("Employe", employee);
 
-            var data = await dbContext.Placeswork.Where(x => x.EmployeeId == id).FirstOrDefaultAsync();
+               var data = await dbContext.Placeswork
+                                   .Where(x => x.EmployeeId == id)
+                                        .FirstOrDefaultAsync();
             if (data == null)
                 return NotFound();
 
@@ -193,42 +196,64 @@ namespace HrPayroll.Areas.Admin.Controllers
         }
 
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public async Task<ActionResult> ChangePlaceEmployee(WorkPlaceModel workPlace)
         {
             if(ModelState.IsValid)
             {
                 try
                 {
-                var empId = HttpContext.Session.GetObjectFromJson<Employee>("Employe").Id;
+                var empId = HttpContext.Session
+                                            .GetObjectFromJson<Employee>("Employe").Id;
                     if (empId == 0)
                         return NotFound();
 
-                var empWorkPlace = await dbContext.Placeswork.Where(x => x.EmployeeId == empId).FirstOrDefaultAsync();
-                if (empWorkPlace == null)
-                    return NotFound();
+                 var EmployeeWork =  dbContext
+                                .Placeswork
+                                    .Where(x => x.EmployeeId == empId)
+                                        .Include(x => x.Positions)
+                                            .ThenInclude(x => x.EmployeeSalaries)
+                                                .FirstOrDefault();
 
-                    
-                    var salary = await dbContext.EmployeeSalaries.Where(x => x.PositionsId == empWorkPlace.PositionsId).FirstOrDefaultAsync();
-                    using (var transaction = await dbContext.Database.BeginTransactionAsync())
+                  if(EmployeeWork != null)
                     {
-
-                            empWorkPlace.EmporiumId = (int)options.Value.EmporiumId;
-                            empWorkPlace.PositionsId = (int)options.Value.PositionsId;
-                            empWorkPlace.EmployeeId = empId;
-                            empWorkPlace.StarDate = workPlace.StartDate;
-                            dbContext.Placeswork.Update(empWorkPlace);
-
-                        WorkEndDate endDate = new WorkEndDate()
+                        if(EmployeeWork.StarDate.Month == workPlace.StartDate.Month)
                         {
-                            EmployeeId = empId,
-                            EndDate = workPlace.StartDate,
-                            Salary = salary.Salary,
-                        };
-                       await dbContext.WorkEnds.AddAsync(endDate);
+                            if (EmployeeWork.StarDate.Day > workPlace.StartDate.Day)
+                            {
+                                ModelState.AddModelError("", "There was no such employee in our company at that date");
+                                return View();
+                            }
+                        }
 
-                          await dbContext.SaveChangesAsync();
+                        if(DateTime.Now.Day <= workPlace.StartDate.Day)
+                        {
+                            using (var transaction = await dbContext.Database.BeginTransactionAsync())
+                            {
+                                EmployeeWork.EmporiumId = (int)options.Value.EmporiumId;
+                                EmployeeWork.PositionsId = (int)options.Value.PositionsId;
+                                EmployeeWork.EmployeeId = empId;
+                                dbContext.Placeswork.Update(EmployeeWork);
 
-                             transaction.Commit();
+                                WorkEndDate endDate = new WorkEndDate()
+                                {
+                                    EmployeeId = empId,
+                                    EndDate = workPlace.StartDate,
+                                    PositionName = EmployeeWork.Positions.Name,
+                                    Salary = EmployeeWork.Positions.EmployeeSalaries.Salary
+                                };
+                                await dbContext.WorkEnds.AddAsync(endDate);
+                                await dbContext.SaveChangesAsync();
+                                transaction.Commit();
+                                ModelState.AddModelError("", "Success");
+                                return View();
+                            }
+                        }
+                        else
+                        {
+                            ModelState.AddModelError("", "There will be no change to the past history.");
+                        }
+                            
                     }
                 }
                 catch(Exception ex)
@@ -244,9 +269,12 @@ namespace HrPayroll.Areas.Admin.Controllers
         {
             if (!id.HasValue)
                 return NotFound();
-            var data = await dbContext.Placeswork.Where(x => x.EmployeeId == id).FirstOrDefaultAsync();
+            var data = await dbContext.Placeswork
+                                         .Where(x => x.EmployeeId == id)
+                                                 .FirstOrDefaultAsync();
             if (data == null)
                 return NotFound();
+
             dbContext.Placeswork.Remove(data);
             await dbContext.SaveChangesAsync();
             return View();
@@ -257,11 +285,42 @@ namespace HrPayroll.Areas.Admin.Controllers
         {
             if(id != null)
             {
-                var data = await dbContext.Employees.Where(x => x.Id == id).FirstOrDefaultAsync();
+                var data = await dbContext.Employees
+                                .Where(x => x.Id == id)
+                                     .FirstOrDefaultAsync();
+
                 if(data != null)
                 {
                     HttpContext.Session.SetObjectAsJson("Employ", data);
                 }
+            }
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<ActionResult> AddEndPosition(WorkEndDate workEndDate)
+        {
+            if(ModelState.IsValid)
+            {
+                var data = HttpContext.Session.GetObjectFromJson<Employee>("Employ");
+
+                var empPosition = dbContext.Placeswork
+                                        .Where(x => x.EmployeeId == data.Id)
+                                               .Include(y => y.Positions)
+                                                    .ThenInclude(z => z.EmployeeSalaries)
+                                                           .FirstOrDefault();
+
+                WorkEndDate workEnd = new WorkEndDate()
+                {
+                    EmployeeId = data.Id,
+                    EndDate = workEndDate.EndDate,
+                    Salary = empPosition.Positions.EmployeeSalaries.Salary,
+                    IsCalcDate = false
+                };
+                await  dbContext.WorkEnds.AddAsync(workEnd);
+                await dbContext.SaveChangesAsync();
+                ModelState.AddModelError("", "Success");
             }
             return View();
         }

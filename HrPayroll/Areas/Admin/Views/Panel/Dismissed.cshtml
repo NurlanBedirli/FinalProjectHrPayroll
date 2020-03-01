@@ -1,0 +1,56 @@
+﻿@{
+    ViewData["Title"] = "Dismissed";
+}
+
+@using HrPayroll.Areas.Admin.EmployeeModel
+@model List<Dismissed>
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase">Data Tables</h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="card-block">
+                        <table class="datatable table table-stripped">
+                            <thead>
+                                <tr>
+                                    <th>Photo</th>
+                                    <th>Name</th>
+                                    <th>Email</th>
+                                    <th>SerialNumber</th>
+                                    <th>End Date</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var elm in Model)
+                                {
+                                <tr>
+                                    <td><img src="@elm.Photo" /></td>
+                                    <td>@elm.Name @elm.Surname</td>
+                                    <td>@elm.Email</td>
+                                    <td>@elm.IDCardSerialNumber</td>
+                                    <td>@elm.EndDate</td>
+                                    <td class="btn btn-success bonus-table"><a asp-action="BonusEdit" asp-controller="Menecer" asp-area="Admin" asp-route-id="@elm.Id">Del</a></td>
+                                </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript" src="~/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="~/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/tagsinput.js"></script>
+}
+

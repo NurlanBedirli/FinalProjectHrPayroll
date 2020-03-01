@@ -567,7 +567,7 @@ table.dataTable tbody td.patient-img { padding: 2px;}
 .table.custom-table > thead > tr > td,
 
 .table.custom-table > thead > tr > th {
-    padding: 10px 7px;
+    padding: 10px 5px;
     vertical-align: middle;
     color: goldenrod;
 }

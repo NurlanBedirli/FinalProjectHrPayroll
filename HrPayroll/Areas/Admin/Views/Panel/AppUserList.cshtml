@@ -1,0 +1,65 @@
+﻿@{
+    ViewData["Title"] = "AppUserList";
+}
+@using HrPayroll.Models
+@model List<AppUserRoleModel>
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase">Data Tables</h5>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="card-box">
+                    <div class="card-block">
+                        <table class="datatable table table-stripped">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Surname</th>
+                                    <th>UserName</th>
+                                    <th>Email</th>
+                                    <th>Rols</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var user in Model)
+                                {
+                                <tr>
+                                    <td>@user.AppUser.FirstName</td>
+                                    <td>@user.AppUser.SecondName</td>
+                                    <td>@user.AppUser.UserName</td>
+                                    <td>@user.AppUser.Email</td>
+                                    <td>
+                                        @foreach (var rol in user.Roles)
+                                        {
+                                        <span>@rol  </span>  
+                                        }
+                                    </td>
+                                        <td>
+                                            <a style="color:white" class="btn btn-primary" asp-controller="Panel" asp-action="ChangeRol" asp-route-id="@user.AppUser.Id">Change rol</a>
+                                            <a style="color:white" class="btn btn-danger" asp-action="EditAppUser" asp-controller="Panel" asp-area="Admin" asp-route-id="@user.AppUser.Id">Edit</a>
+                                        </td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript" src="~/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="~/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/tagsinput.js"></script>
+}
+
+
+

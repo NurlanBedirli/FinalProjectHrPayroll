@@ -49,14 +49,12 @@ namespace HrPayroll
                 options.MinimumSameSitePolicy = SameSiteMode.None;
             });
 
+
             //DropDrown Select Option configuration
             services.Configure<WorkIdOptions>(options => Configuration.Bind(options));
-
-
             services.AddAuthentication();
 
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
-            
 
             services.AddDistributedMemoryCache();
             services.AddSession();
@@ -73,7 +71,6 @@ namespace HrPayroll
             else
             {
                 app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
@@ -91,7 +88,6 @@ namespace HrPayroll
                   template: "{area:exists}/{controller=Account}/{action=About}/{id?}"
                 );
             });
-            
 
             app.UseMvc(routes =>
             {

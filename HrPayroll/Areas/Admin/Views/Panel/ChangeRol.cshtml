@@ -1,0 +1,110 @@
+﻿@{
+    ViewData["Title"] = "ChangeRol";
+}
+
+
+
+@{
+    ViewData["Title"] = "MessageRoleList";
+}
+
+@model AppUserRoleModel
+<div class="page-wrapper">
+    <!-- content -->
+    <div class="content container-fluid">
+        <div class="page-content">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <form method="post">
+                        <div asp-validation-summary="ModelOnly"></div>
+                        <div class="card">
+                            <div class="page-title">
+                                <div class="row">
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="Page-title">Role</div>
+                                    </div>
+                                    <div class="form-group custom-mt-form-group col-md-2" style="margin-left:30px;">
+                                        <select id="userrole" class="form-control" asp-for="Role">
+
+                                            @foreach (var elm in Model.IdentityAllRole)
+                                            {
+                                                <option>@elm</option>
+                                            }
+                                        </select>
+                                        <label class="control-label">Role</label><i class="bar"></i>
+                                    </div>
+                                    <div class="form-group custom-mt-form-group col-md-2" style="margin-left:30px;">
+                                        <select asp-for="Holding" id="Holding">
+                                            @foreach (var holding in Model.Holdings)
+                                            {
+                                                <option>@holding.Name</option>
+                                            }
+                                        </select>
+                                        <span asp-validation-for="Holding"></span>
+                                        <label class="control-label">Holding</label><i class="bar"></i>
+                                    </div>
+                                    <div class="form-group custom-mt-form-group col-md-2" style="margin-left:30px;">
+                                        <select asp-for="Company" id="companyName">
+                                            <option></option>
+                                        </select>
+                                        <span asp-validation-for="Company"></span>
+                                        <label class="control-label">Company</label><i class="bar"></i>
+                                    </div>
+                                    <div class="form-group custom-mt-form-group col-md-2" style="margin-left:30px;">
+                                        <select asp-for="Emporium" id="emporiaName">
+                                            <option></option>
+                                        </select>
+                                        <span asp-validation-for="Emporium"></span>
+                                        <label class="control-label">Emporia</label><i class="bar"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Name</th>
+                                            <th scope="col">Surname</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Number</th>
+                                            <th scope="col">Action</th>
+                                            <th scope="col">Menu</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                            <tr>
+                                                <td>@Model.AppUser.FirstName</td>
+                                                <td>@Model.AppUser.SecondName</td>
+                                                <td>@Model.AppUser.Email</td>
+                                                <td>@Model.AppUser.PhoneNumber</td>
+                                                <td>
+                                                    <button class="btn btn-primary" type="submit" asp-route-AppUserId="@Model.AppUser.Id">Rol Bagla</button>
+                                                </td>
+                                                <td>
+                                                        <div class="dropdown profile-action" style="position: inherit !important;">
+                                                            <a  class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                            <div class="dropdown-menu dropdown-menu-right">
+                                                                @foreach (var rol in Model.IdentityUserRoles)
+                                                                {
+                                                                    <span style="text-align:center; color:white; margin-left: 35px;">@rol.Name</span>
+                                                                    <a class="dropdown-item about" asp-controller="Panel" asp-action="DeleteAppUserRol" asp-route-Roleid="@rol.Id"><i class="fa fa-trash-o m-r-5"></i>Delete</a>
+                                                                }
+                                                            </div>
+                                                        </div>
+                                                </td>
+                                            </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/company_emporium_position_add_change.js"></script>
+
+
+
+

@@ -1,0 +1,104 @@
+﻿
+@{
+    ViewData["Title"] = "Calendar";
+}
+
+<div class="page-wrapper">
+    <!-- content -->
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase">calendar</h5>
+                </div>
+                <div class="col-lg-5 col-md-12 col-sm-12 col-12">
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-sm-8 col-4">
+
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="card-box m-b-0">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div id="calendar"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal none-border" id="event-modal">
+                    <div class="modal-dialog">
+                        <div class="modal-content modal-md">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Add New Event</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                            </div>
+                            <div class="modal-body"></div>
+                            <div class="modal-footer text-center">
+                                <button type="button" class="btn btn-primary btn-lg save-event">Create event</button>
+                                <button type="button" class="btn btn-danger btn-lg delete-event" data-dismiss="modal">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+        $('#calendar').fullCalendar({
+            header:
+            {
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            buttonText: {
+                today: 'today',
+                month: 'month',
+                week: 'week',
+                day: 'day'
+            },
+
+            events: function (start, end, timezone, callback) {
+                $.ajax({
+                    url: '/Home/GetCalendarData',
+                    type: "GET",
+                    dataType: "JSON",
+
+                    success: function (result) {
+                        var events = [];
+
+                        $.each(result, function (i, data) {
+                            events.push(
+                                {
+                                    title: data.Title,
+                                    description: data.Desc,
+                                    start: moment(data.Start_Date).format('YYYY-MM-DD'),
+                                    end: moment(data.End_Date).format('YYYY-MM-DD'),
+                                    backgroundColor: "#9501fc",
+                                    borderColor: "#fc0101"
+                                });
+                        });
+
+                        callback(events);
+                    }
+                });
+            },
+
+            eventRender: function (event, element) {
+                element.qtip(
+                    {
+                        content: event.description
+                    });
+            },
+
+            editable: false
+        });
+    }); 
+</script>
+

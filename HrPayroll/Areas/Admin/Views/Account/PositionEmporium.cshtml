@@ -1,0 +1,185 @@
+﻿
+@{
+    ViewData["Title"] = "PositionEmporium";
+}
+
+@using HrPayroll.Areas.Admin.AddHolEmpPosDepModel
+@model AddCategoryModel
+<div class="page-wrapper">
+    <!-- content -->
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase"></h5>
+                </div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card">
+                        <div class="page-title">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <div class="page-title"><a style="color:chocolate; cursor:pointer;"></a> Add Holding,Departament,Emporium,Position </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form class="row" method="post">
+                                        <div asp-validation-summary="ModelOnly"></div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group custom-mt-form-group">
+                                                <select id="data" asp-for="CompanyName"></select>
+                                                <label class="control-label" asp-for="CompanyName">Company Name</label><i class="bar"></i>
+                                                <span asp-validation-for="CompanyName"></span>
+                                            </div>
+                                            <div class="form-group custom-mt-form-group">
+                                                <select id="emporiaName" asp-for="EmporiaName"></select>
+                                                <label class="control-label" asp-for="EmporiaName">Emporium Name</label><i class="bar"></i>
+                                                <span asp-validation-for="EmporiaName"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group custom-mt-form-group">
+                                                <select id="PositionName" asp-for="PositionName"></select>
+                                                <label class="control-label" asp-for="PositionName">Position Name</label><i class="bar"></i>
+                                                <span asp-validation-for="PositionName"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <div class="form-group text-center custom-mt-form-group">
+                                                <button class="btn btn-primary mr-2" type="submit">Save</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table table-striped" style="color: orange; margin: auto;">
+                            <thead>
+                                <tr>
+                                    <th>Company</th>
+                                    <th>Emporium</th>
+                                    <th>Departament</th>
+                                    <th>Position</th>
+                                    <th>Salary</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+                            <tbody id="del_hol">
+                                @if ((List<WorkPlaceModel>)ViewBag.data != null)
+                                {
+                                    foreach (var elm in (List<WorkPlaceModel>)ViewBag.data)
+                                    {
+                                        <tr>
+                                            <td class="name">@elm.CompanyName</td>
+                                            <td class="name">@elm.EmporiaName</td>
+                                            <td class="name">@elm.DepartamentName</td>
+                                            <td class="name">@elm.PositionName</td>
+                                            <td class="name">@elm.Salary</td>
+                                            <td>
+                                                <div class="dropdown dropdown-action">
+                                                    <a href="#" class="action-icon dropdown-toggle" data-toggle="dropdown" aria-expanded="false"><i class="fa fa-ellipsis-v"></i></a>
+                                                    <div class="dropdown-menu dropdown-menu-right">
+                                                        <a class="dropdown-item delete" asp-controller="Account" asp-area="Admin" asp-action="DeletePositionsEmperium" asp-route-id="@elm.EmpPosId" title="Delete"><i class="fa fa-trash-o m-r-5"></i>Delete</a>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    }
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        $.ajax({
+            url: "/Admin/Account/AjaxCompany",
+            dataType: "Json",
+            type: "post",
+            success: function (respons) {
+                if (respons.message == 202) {
+                    for (var i = 0; i < respons.company.length; i++) {
+                        var option = document.createElement('option');
+                        option.text = respons.company[i].name;
+                        option.value = respons.company[i].id;
+                        $("#data").append(option);
+                    }
+                }
+            }
+        });
+
+
+        $.ajax({
+            url: "/Admin/Account/AjaxPosition",
+            dataType: "Json",
+            type: "post",
+            success: function (respons) {
+                if (respons.message == 200) {
+                    for (var i = 0; i < respons.company.length; i++) {
+                        var option = document.createElement('option');
+                        option.text = respons.company[i].name;
+                        option.value = respons.company[i].id;
+                        $("#PositionName").append(option);
+                    }
+                }
+            }
+        });
+
+
+        $.ajax({
+            url: "/Admin/Account/AjaxDepartament",
+            dataType: "Json",
+            type: "post",
+            success: function (respons) {
+                if (respons.message == 200) {
+                    for (var i = 0; i < respons.company.length; i++) {
+                        var option = document.createElement('option');
+                        option.text = respons.company[i].name;
+                        option.value = respons.company[i].id;
+                        $("#DepartamentName").append(option);
+                    }
+                }
+            }
+        });
+
+
+        $("#data").on("change", function () {
+
+            $.ajax({
+                url: "/Admin/Reciurment/AjaxEmporiumComboBox",
+                dataType: "Json",
+                type: "post",
+                data: {
+                    id: $(this).val()
+                },
+                success: function (respons) {
+                    if (respons.message == 202) {
+                        $("#emporiaName option").remove();
+                        for (var i = 0; i < respons.emporia.length; i++) {
+                            var option = document.createElement('option');
+                            option.value = respons.emporia[i].id;
+                            option.innerText = respons.emporia[i].name;
+                            $("#emporiaName").append(option);
+                        }
+                    }
+                }
+            });
+     });
+
+
+    });
+</script>
+
+
+

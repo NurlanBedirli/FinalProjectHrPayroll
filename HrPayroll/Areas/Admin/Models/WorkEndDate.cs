@@ -14,6 +14,7 @@ namespace HrPayroll.Areas.Admin.Models
         public DateTime EndDate { get; set; }
         public bool IsCalcDate { get; set; } = false;
         public decimal Salary { get; set; }
+        public string PositionName { get; set; }
         public Employee Employee { get; set; }
         public int EmployeeId { get; set; }
     }

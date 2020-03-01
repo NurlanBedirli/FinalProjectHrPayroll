@@ -1,0 +1,83 @@
+﻿@{
+    ViewData["Title"] = "AddMonthSale";
+}
+@using HrPayroll.Areas.Admin.ViewModel
+@using HrPayroll.Areas.Admin.Models
+@model EmporiumMonthSale
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase"></h5>
+                </div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card">
+                        <div class="page-title">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <div class="page-title"><a style="color:chocolate; cursor:pointer;"></a> Add Month Sale</div>
+                                        <h4 id="quata">
+                                        </h4>
+                                   </div>
+                               </div>
+                           </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <form class="row" method="post">
+                                        <div asp-validation-summary="ModelOnly"></div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group custom-mt-form-group">
+                                                <input type="number" name="Prize" asp-for="Prize" />
+                                                <label class="control-label" asp-for="Prize">Prize</label><i class="bar"></i>
+                                                <span asp-validation-for="Prize"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                            <div class="form-group custom-mt-form-group">
+                                                <input asp-for="Date" type="date">
+                                                <label class="control-label" asp-for="Date">Date</label><i class="bar"></i>
+                                                <span asp-validation-for="Date"></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <div class="form-group text-center custom-mt-form-group">
+                                                <button class="btn btn-primary mr-2" type="submit">Save</button>
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+
+        $.ajax({
+            url: "/Admin/Menecer/MonthSaleAjax",
+            dataType: "Json",
+            type: "Post",
+            success: function (respons) {
+                if (respons.message == 200) {
+                    for (var elm of respons.data) {
+                        $("#quata").text(`The monthly quota of  ${elm.emporium}   Store is ${elm.prize} Azn`);
+                    }
+                }
+            }
+        });
+    });
+</script>
+
+
+
+

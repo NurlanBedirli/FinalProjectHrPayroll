@@ -1,0 +1,101 @@
+﻿@{
+    ViewData["Title"] = "EditAppUser";
+}
+
+@model AdminModel
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase">Edit Profile</h5>
+                </div>
+            </div>
+        </div>
+        <div class="page-content">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="card">
+                        <div class="page-title">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                    <div class="page-title">Basic information</div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="card-body">
+                            <div class="row">
+                                <form method="post" class="col-md-12 row"  enctype="multipart/form-data">
+                                    <div asp-validation-summary="ModelOnly"></div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                                        <div class="form-group custom-mt-form-group">
+                                            <input type="text" asp-for="FirstName" name="FirstName" />
+                                            <label class="control-label">Firstname</label><i class="bar"></i>
+                                            <span asp-validation-for="FirstName"></span>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <input type="text" asp-for="SecondName" />
+                                            <label class="control-label" asp-for="SecondName">Lastname</label><i class="bar"></i>
+                                            <span asp-validation-for="SecondName"></span>
+                                        </div>
+                                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                            <div class="form-group custom-mt-form-group">
+                                                <input type="file" name="Image" style="margin-bottom:10px;" asp-for="Image" id="fileimage" multiple>
+                                                <label class="control-label"></label><i class="bar"></i>
+                                            </div>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <input type="text" asp-for="Email" name="Email" disabled class="email-edit" />
+                                            <label class="control-label" asp-for="Email">Email</label><i class="bar"></i>
+                                            <span asp-validation-for="Email"></span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group col-10 col-md-5 user-img">
+                                        <div class="col-md-9">
+                                            <img src="" style="width:100%;" id="img" />
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+
+                                        <div class="form-group custom-mt-form-group">
+                                            <input type="password" asp-for="NewPassword" name="NewPassword" />
+                                            <label class="control-label" asp-for="NewPassword">New Password</label><i class="bar"></i>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <input type="password" asp-for="OldPassword" name="OldPassword" />
+                                            <label class="control-label" asp-for="OldPassword">Old Password</label><i class="bar"></i>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <input type="number" asp-for="PhoneNumber" name="PhoneNumber" />
+                                            <label class="control-label" asp-for="PhoneNumber">Mobile number</label><i class="bar"></i>
+                                            <span asp-validation-for="PhoneNumber"></span>
+                                        </div>
+                                        <div class="form-group custom-mt-form-group">
+                                            <input type="date" asp-for="Birthday" name="Birthday" />
+                                            <label class="control-label" asp-for="Birthday">Birth Date</label><i class="bar"></i>
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group">
+                                            <textarea id="message" class="form__field" placeholder="Present Address" asp-for="Address" rows="4">913 Deer Ridge Drive,uccasunna, NJ 07876</textarea>
+                                            <label for="message" class="form-label" asp-for="Address">Present Address</label>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                                        <div class="form-group text-center custom-mt-form-group">
+                                            <button class="btn btn-primary mr-2" type="submit">Save</button>
+                                            <button class="btn btn-secondary" type="reset">Cancel</button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="~/js/fileupload.js"></script>
+

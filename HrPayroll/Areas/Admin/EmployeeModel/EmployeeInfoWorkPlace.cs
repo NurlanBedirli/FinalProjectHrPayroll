@@ -1,5 +1,7 @@
-﻿using System;
+﻿using HrPayroll.Areas.Admin.Models;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -15,6 +17,9 @@ namespace HrPayroll.Areas.Admin.EmployeeModel
         public string EmperiumName { get; set; }
         public string PositionName { get; set; }
         public string DepartamentName { get; set; }
+        public List<EmployeAccuredSalary> EmployeAccuredSalaries { get; set; }
+        public decimal AccuredSalary { get; set; }
+        public DateTime AccuredDate { get; set; }
         public DateTime StartDate { get; set; }
         public decimal Salary { get; set; }
     }

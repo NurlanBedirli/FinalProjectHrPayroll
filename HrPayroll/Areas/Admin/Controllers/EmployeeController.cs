@@ -345,6 +345,9 @@ namespace HrPayroll.Areas.Admin.Controllers
             return RedirectToAction("AboutEmployee", "Reciurment", new { area = "Admin" });
         }
 
+
+
+
         // Employee  add  info
         [HttpGet]
         public ActionResult AddEmployee()
@@ -389,6 +392,7 @@ namespace HrPayroll.Areas.Admin.Controllers
                                 PlasiyerCode = employee.PlasiyerCode
                             });
                             await dbContext.SaveChangesAsync();
+                            ModelState.AddModelError("", "Success");
                         }
                         else
                         {
@@ -414,6 +418,7 @@ namespace HrPayroll.Areas.Admin.Controllers
                             PlasiyerCode = employee.PlasiyerCode,
                         });
                         await dbContext.SaveChangesAsync();
+                        ModelState.AddModelError("", "Success");
                     }
                 }
                 else
@@ -538,6 +543,8 @@ namespace HrPayroll.Areas.Admin.Controllers
             };
             return View(paging);
         }
+
+
 
         // Employee  searc filter pagination ajax
         [HttpPost]

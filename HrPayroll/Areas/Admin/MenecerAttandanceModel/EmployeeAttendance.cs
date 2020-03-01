@@ -8,9 +8,12 @@ namespace HrPayroll.Areas.Admin.MenecerAttandanceModel
     public class EmployeeAttendance
     {
         public string Name { get; set; }
+        public string ReasonName { get; set; }
         public string Surname { get; set; }
         public DateTime AttandanceDate { get; set; }
         public bool SignIn { get; set; }
+        public DateTime startDate { get; set; }
         public int EmployeeId { get; set; }
+        public DateTime EmpStartDate { get; set; }
     }
 }

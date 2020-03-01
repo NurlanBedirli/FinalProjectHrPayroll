@@ -17,7 +17,7 @@
         </div>
         <div class="content-page">
             <div class="row filter-row">
-                <div class="col-sm-6 col-md-4">
+                @*<div class="col-sm-6 col-md-4">
                     <div class="form-group custom-mt-form-group">
                         <input type="text" id="name" />
                         <label class="control-label"> Name</label><i class="bar"></i>
@@ -29,12 +29,9 @@
                         <label class="control-label">Surname</label><i class="bar"></i>
                     </div>
                 </div>
-                <div class="col-sm-6 col-md-4">
-                    <div class="form-group custom-mt-form-group">
-                        <input type="text" id="pscode" />
-                        <label class="control-label">Plasiyer Code</label><i class="bar"></i>
-                    </div>
-                </div>
+                <div class="col-sm-6 col-md-3">
+                    <a href="#" class="btn btn-success btn-block mt-4 mb-2"> Search </a>
+                </div>*@
                 <div class="col-md-2 col-sm-2">
                     <div class="form-group custom-mt-form-group" style="border: 1px solid;margin-top:0px !important;padding:0px !important;border-radius: 14px;color: aqua;">
                         <form method="get" id="formm">
@@ -58,11 +55,17 @@
                 </div>
             </div>
             <div class="row" style="margin-bottom:20px;">
+                <div class="showw5" id="addemp" style="margin-left: 1%;cursor:pointer;color:white">
+                    <a class="btn btn-primary btn-rounded float-right" asp-area="Admin" asp-controller="Menecer" asp-action="AddMonthSale"><i class="fa fa-plus"></i> Month Sales</a>
+                </div>
                 <div class="showw1" id="addemp" style="display:none;margin-left: 1%;">
-                    <a class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i>Work Attandance</a>
+                    <a class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i>Attandance</a>
                 </div>
                 <div class="showw2" id="addemp" style="display:none;margin-left: 1%;">
-                    <a class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i>Work Attandance</a>
+                    <a class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i>Bonus</a>
+                </div>
+                <div class="showw3" id="addemp" style="display:none;margin-left: 1%;">
+                    <a class="btn btn-primary btn-rounded float-right"><i class="fa fa-plus"></i>Vacation</a>
                 </div>
             </div>
             <div class="row">
@@ -145,16 +148,20 @@
             var id = $(this).val();
             var elm1 = document.querySelector(".showw1");
             var elm2 = document.querySelector(".showw2");
+            var elm3 = document.querySelector(".showw3");
 
             if ($(this).prop("checked") == true) {
                 elm1.querySelector("a").setAttribute("href", "/Admin/Menecer/WorkAttendance/" + id);
                 elm2.querySelector("a").setAttribute("href", "/Admin/Menecer/BonusEmployee/" + id);
+                elm3.querySelector("a").setAttribute("href", "/Admin/Menecer/AddVacation/" + id);
                 elm1.style.display = "block";
                 elm2.style.display = "block";
+                elm3.style.display = "block";
             }
             else {
                 elm1.style.display = "none";
                 elm2.style.display = "none";
+                elm3.style.display = "none";
             }
         });
     });

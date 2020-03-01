@@ -1,0 +1,111 @@
+﻿@{
+    ViewData["Title"] = "EmployeeList";
+}
+
+@using HrPayroll.Areas.Admin.EmployeeModel
+@model List<EmployeeInfoWorkPlace>
+<div class="page-wrapper">
+    <div class="content container-fluid">
+        <div class="page-header">
+            <div class="row">
+                <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+                    <h5 class="text-uppercase">Data Tables</h5>
+                </div>
+            </div>
+        </div>
+        <form method="post">
+            <div class="row">
+                <div class="col-sm-12">
+                    <div class="card-box">
+                        <div class="card-block">
+                            <div class="form-group" style="display: inline-block;">
+                                <button type="submit" class="btn btn-primary">Calculate</button>
+                            </div>
+                            <div class="form-group btn btn-success" style="display: inline-block;padding: 7px 14px 6px 15px;margin: 0px 4px 2px;">
+                                <label class="align-items-xl-center" style="color:white;margin: 0;">Check All</label>
+                                <input type="checkbox" onclick="toggle(this);" /><br />
+                            </div>
+                            <div class="form-group custom-mt-form-group" style="display: inline-block;">
+                                <input name="DateTime" type="date">
+                                <label class="control-label">Date</label><i class="bar"></i>
+                            </div>
+                            <div class="form-group custom-mt-form-group" style="display: inline-block; margin-left:30%">
+                                <input name="SerchDateTime" type="date">
+                                <label class="control-label">Date</label><i class="bar"></i>
+                            </div>
+                            <div class="form-group" style="display: inline-block;">
+                                <button type="submit" class="btn btn-primary">Search</button>
+                            </div>
+                            <div asp-validation-summary="ModelOnly"></div>
+                            <table class="datatable table table-stripped">
+                                <thead>
+                                    <tr>
+                                        <th>Photo</th>
+                                        <th>Name</th>
+                                        <th>Company</th>
+                                        <th>Emporium</th>
+                                        <th>Position</th>
+                                        <th>Salary</th>
+                                        <th>AccuredDate</th>
+                                        <th>AccuredSalary</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach (var elm in Model)
+                                    {
+                                        <tr>
+                                            <td><h2 style="margin-right:5px"><img src="/img/@elm.Photo" style="width:45px; border-radius:100px"></h2></td>
+                                            <td>@elm.Name</td>
+                                            <td>@elm.CompanyName</td>
+                                            <td>@elm.EmperiumName</td>
+                                            <td>@elm.PositionName</td>
+                                            <td>@elm.Salary</td>
+                                            @if (elm.EmployeAccuredSalaries.Count != 0)
+                                            {
+                                                <td>@elm.EmployeAccuredSalaries.First().AccuredDate.ToString("dd.dd.yyyy")</td>
+
+                                            }
+                                            else
+                                            {
+                                                <td>empty</td>
+
+                                            }
+                                            @if (elm.EmployeAccuredSalaries.Count != 0)
+                                            {
+                                                <td>@elm.EmployeAccuredSalaries.First().Salary</td>
+                                            }
+                                            else
+                                            {
+                                                <td>empty</td>
+
+                                            }
+                                            <td class="btn bonus-table"><input type="checkbox" name="Id[]" value="@elm.id" /></td>
+                                        </tr>
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+@section Scripts{
+    <script type="text/javascript" src="~/js/jquery.dataTables.min.js"></script>
+    <script type="text/javascript" src="~/js/dataTables.bootstrap4.min.js"></script>
+    <script src="~/js/tagsinput.js"></script>
+}
+<script>
+    function toggle(source) {
+        var checkboxes = document.querySelectorAll('input[type="checkbox"]');
+        for (var i = 0; i < checkboxes.length; i++) {
+            if (checkboxes[i] != source)
+                checkboxes[i].checked = source.checked;
+        }
+    }
+</script>
+
+

@@ -9,6 +9,7 @@ namespace HrPayroll.Areas.Admin.EmployeeModel
 {
     public class WorkPlaceModel
     {
+        public int PositionId { get; set; }
         [Required]
         public string HoldingName { get; set; }
         [Required]
@@ -25,6 +26,6 @@ namespace HrPayroll.Areas.Admin.EmployeeModel
         [Column(TypeName = "date")]
         [DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}", ApplyFormatInEditMode = true)]
         public DateTime StartDate { get; set; }
-
+        public int EmpPosId { get; set; }
     }
 }

@@ -16,5 +16,7 @@ namespace HrPayroll.Areas.Admin.Models
         public Company Company { get; set; }
         public int CompanyId { get; set; }
         public ICollection<EmporiumPosition> EmporiumPositions { get; set; }
+        public List<MonthSale> MonthSales { get; set; }
+        public List<EmporiumMonthSale> EmporiumMonthSales { get; set; }
     }
 }

@@ -12,5 +12,7 @@ namespace HrPayroll.Areas.Admin.MenecerAttandanceModel
         public List<EmployeeAttendance> employeeAttendances { get; set; }
         public List<AbsentCount> AbsentCount { get; set; }
         public DisciplinePenalty DisciplinePenalty { get; set; }
+        public List<VacationEmployee> VocationEmployees { get; set; }
+        public DateTime SearchDate { get; set; }
     }
 }

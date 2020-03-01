@@ -46,7 +46,7 @@
                                                 @if (Context.Session.GetObjectFromJson<int>("AbsentCount") != 0)
                                                 {
                                                     var count = Context.Session.GetObjectFromJson<int>("AbsentCount");
-                                                    <input asp-for="Count" type="text" value="@count">
+                                                    <input asp-for="Count" type="text" value="@count" disabled>
                                                 }
                                                 <label class="control-label" asp-for="Count">Attendance Count</label><i class="bar"></i>
                                                 <span asp-validation-for="Count"></span>
